@@ -8,7 +8,7 @@
 
 		$fechaIni = strtotime(date('Y-m-d H:i:s') . " -".($pagina - 1)." month");
 
-		for ($i = 0; $i < 30; $i++)
+		for ($i = 0; $i < 7; $i++)
 		{
 			$fecha = strtotime(date('Y-m-d H:i:s') . " -".($pagina - 1)." month". " -".($i)." day");
 
