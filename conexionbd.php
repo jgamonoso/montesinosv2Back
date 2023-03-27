@@ -4,14 +4,14 @@ function consultarSql($sql)
 {
     error_log("¡La base de datos de Oracle no está disponible!", 0);
 	// Nube
-	$servername = "montesinyymnba.mysql.db";
-	$username = "montesinyymnba";
-	$password = "ntolc10DB";
+	// $servername = "montesinyymnba.mysql.db";
+	// $username = "montesinyymnba";
+	// $password = "ntolc10DB";
 
 	//localhost
-	// $servername = "127.0.0.1";
-	// $username = "root";
-	// $password = "";
+	$servername = "127.0.0.1";
+	$username = "root";
+	$password = "";
 	$dbname = "montesinyymnba";
 
 	// Create connection
