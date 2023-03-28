@@ -1,5 +1,5 @@
 <?php
-	require_once "../conexionbd.php";
+	require_once __DIR__ . '/../conexionbd.php';
 
 	function validarManager($user, $pass)
 	{

@@ -1,6 +1,6 @@
 <?php
-	require_once "../conexionbd.php";
-	require_once("../objetos/noticia.php");
+	require_once __DIR__ . '/../conexionbd.php';
+	require_once __DIR__ . '/../objetos/noticia.php';
 
 	function obtenerListaFechas($pagina)
 	{
