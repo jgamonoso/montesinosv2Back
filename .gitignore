@@ -1,2 +1,32 @@
-# En el repositorio está como en la nube, en mi local usaré los datos para localhost
-conexionbd.php
+# Archivos de registro
+*.log
+
+# Archivos y directorios de caché
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Directorio de dependencias de Composer (manejador de dependencias de PHP)
+/vendor/
+
+# Archivos de configuración del entorno
+.env
+
+# Archivos temporales
+*.tmp
+*.swp
+*.swo
+*~.nib
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos y directorios específicos de Visual Studio Code
+.vscode/
+
+# Archivos y directorios de prueba
+/phpunit.xml
+/coverage/
+/tests/_output/
