@@ -18,7 +18,7 @@
 		return $listaFechas;
 	}
 
-function obtenerNoticiasDia($dia, $pkLiga)
+	function obtenerNoticiasDia($dia, $pkLiga)
 	{
 		$sql = "select * from noticia where fk_noticia_liga = ".$pkLiga." and noticia_fecha='".date('Ymd', $dia)."' order by noticia_prioridad asc, pk_noticia desc";
 
