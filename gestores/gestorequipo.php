@@ -1,9 +1,9 @@
 <?php
 	require_once __DIR__ . '/../conexionbd.php';
 	require_once __DIR__ . '/../objetos/equipo.php';
+	require_once __DIR__ . '/gestorjugadorliga.php';
 	// require_once("/home/montesinyy/www/objetos/equiposorteo.php");
 	// require_once("/home/montesinyy/www/gestores/gestordraftpick.php");
-	// require_once("/home/montesinyy/www/gestores/gestorjugadorliga.php");
 	// require_once("/home/montesinyy/www/gestores/gestorsancion.php");
 	// require_once("/home/montesinyy/www/gestores/gestorbonus.php");
 	// require_once("/home/montesinyy/www/gestores/gestorcontrato.php");
@@ -38,7 +38,7 @@
 			$eq->bloqueado = $row["equipo_bloqueado"];
 			$eq->numMovesDisponibles = $row["equipo_moves_semanales"];
 
-			// $eq->jugadoresConContrato = obtenerJugadoresConContratoEquipo($eq->pkEquipo);
+			$eq->jugadoresConContrato = obtenerJugadoresConContratoEquipo($eq->pkEquipo);
 			// $eq->jugadoresIL = obtenerJugadoresIL($eq->pkEquipo);
 			// $eq->jugadoresLesionados = obtenerJugadoresLesionados($eq->pkEquipo);
 			// $eq->jugadoresCovid = obtenerJugadoresCOVID($eq->pkEquipo);
