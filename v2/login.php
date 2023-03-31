@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../gestores/gestormanager.php';
+require_once __DIR__ . '/../gestores/gestortemporada.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -12,27 +13,40 @@ $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true);
 
 if ($method === 'POST') {
-  $login = $input['login'];
-  $password = $input['password'];
+  $action = isset($input['action']) ? $input['action'] : '';
 
-  $validado = validarManager($login, $password);
+  switch ($action) {
+    case 'obtenerTemporadaActual':
+      // Llamar a la función obtenerTemporadaActual() y devolver el resultado
+      $temporadaActual = obtenerTemporadaActual();
+      echo json_encode($temporadaActual);
+      break;
 
-  if ($validado) {
-    $validadoLiga = validarLigaManager($login, $password);
+    default:
+      // El código original para el inicio de sesión
+      $login = $input['login'];
+      $password = $input['password'];
 
-    $response = [
-      'status' => 'ok',
-      'manager' => $login,
-      'liga' => $validadoLiga,
-    ];
-  } else {
-    $response = [
-        'status' => 'error',
-        'message' => 'Login error',
-    ];
+      $validado = validarManager($login, $password);
+
+      if ($validado) {
+        $validadoLiga = validarLigaManager($login, $password);
+
+        $response = [
+          'status' => 'ok',
+          'manager' => $login,
+          'liga' => $validadoLiga,
+        ];
+      } else {
+        $response = [
+            'status' => 'error',
+            'message' => 'Login error',
+        ];
+      }
+
+      echo json_encode($response);
+      break;
   }
-
-  echo json_encode($response);
 } else {
   http_response_code(405); // Método no permitido
 }
