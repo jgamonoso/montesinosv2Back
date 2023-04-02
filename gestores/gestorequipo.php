@@ -1,11 +1,14 @@
 <?php
 	require_once __DIR__ . '/../conexionbd.php';
 	require_once __DIR__ . '/../objetos/equipo.php';
-	require_once __DIR__ . '/gestorjugadorliga.php';
 	// require_once("/home/montesinyy/www/objetos/equiposorteo.php");
-	// require_once("/home/montesinyy/www/gestores/gestordraftpick.php");
-	// require_once("/home/montesinyy/www/gestores/gestorsancion.php");
-	// require_once("/home/montesinyy/www/gestores/gestorbonus.php");
+	require_once __DIR__ . '/gestorjugadorliga.php';
+	require_once __DIR__ . '/gestordraftpick.php';
+	require_once __DIR__ . '/gestorsancion.php';
+	require_once __DIR__ . '/gestorbonus.php';
+	require_once __DIR__ . '/gestorapuesta.php';
+	require_once __DIR__ . '/gestorpalmares.php';
+	require_once __DIR__ . '/gestorrecord.php';
 	// require_once("/home/montesinyy/www/gestores/gestorcontrato.php");
 	// require_once("/home/montesinyy/www/gestores/gestorparametro.php");
 	// require_once("/home/montesinyy/www/gestores/gestortemporada.php");
@@ -14,9 +17,6 @@
 	// require_once("/home/montesinyy/www/gestores/gestortrade.php");
 	// require_once("/home/montesinyy/www/gestores/gestorsuceso.php");
 	// require_once("/home/montesinyy/www/gestores/gestoremail.php");
-	// require_once("/home/montesinyy/www/gestores/gestorapuesta.php");
-	// require_once("/home/montesinyy/www/gestores/gestorpalmares.php");
-	// require_once("/home/montesinyy/www/gestores/gestorrecord.php");
 
 	function obtenerEquipo($pkManager)
 	{
@@ -39,19 +39,19 @@
 			$eq->numMovesDisponibles = $row["equipo_moves_semanales"];
 
 			$eq->jugadoresConContrato = obtenerJugadoresConContratoEquipo($eq->pkEquipo);
-			// $eq->jugadoresIL = obtenerJugadoresIL($eq->pkEquipo);
-			// $eq->jugadoresLesionados = obtenerJugadoresLesionados($eq->pkEquipo);
-			// $eq->jugadoresCovid = obtenerJugadoresCOVID($eq->pkEquipo);
-			// $eq->jugadoresConDerecho = obtenerJugadoresConDerechoEquipo($eq->pkEquipo);
-			// $eq->draftpicks = obtenerDraftpicksEquipo($eq->pkEquipo);
+			$eq->jugadoresIL = obtenerJugadoresIL($eq->pkEquipo);
+			$eq->jugadoresLesionados = obtenerJugadoresLesionados($eq->pkEquipo);
+			$eq->jugadoresCovid = obtenerJugadoresCOVID($eq->pkEquipo);
+			$eq->jugadoresConDerecho = obtenerJugadoresConDerechoEquipo($eq->pkEquipo);
+			$eq->draftpicks = obtenerDraftpicksEquipo($eq->pkEquipo);
 
-			// $eq->sanciones = obtenerSancionesEquipo($eq->pkEquipo);
-			// $eq->bonus = obtenerBonusEquipo($eq->pkEquipo);
+			$eq->sanciones = obtenerSancionesEquipo($eq->pkEquipo);
+			$eq->bonus = obtenerBonusEquipo($eq->pkEquipo);
 
-			// $eq->apuesta = obtenerApuestaEquipo($eq->pkEquipo);
+			$eq->apuesta = obtenerApuestaEquipo($eq->pkEquipo);
 
-			// $eq->palmares = obtenerPalmaresEquipo($eq->pkEquipo);
-			// $eq->records = obtenerRecordsEquipo($eq->pkEquipo);
+			$eq->palmares = obtenerPalmaresEquipo($eq->pkEquipo);
+			$eq->records = obtenerRecordsEquipo($eq->pkEquipo);
 
 			return $eq;
 		}
