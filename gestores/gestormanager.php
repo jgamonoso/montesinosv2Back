@@ -28,6 +28,31 @@
 		}
 	}
 
+	function obtenerManager($pkManager)
+	{
+		$sql = "select * from manager where pk_manager=".$pkManager;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			$man = new Manager();
+			$man->pkManager = $row["pk_manager"];
+			$man->nombre = $row["manager_nombre"];
+			$man->mail = $row["manager_email"];
+			$man->login = $row["manager_login"];
+
+			$man->grupo = obtenerGrupo($row["fk_manager_grupo"]);
+
+			$man->equipo = obtenerEquipo($man->pkManager);
+
+			return $man;
+		}
+
+		return NULL;
+	}
+
 	function obtenerManagerPorLogin($login)
 	{
 		$sql = "select * from manager where manager_login='".$login."'";
