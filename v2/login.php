@@ -23,11 +23,11 @@ if ($method === 'POST') {
       break;
 
     case 'obtenerManagerPorLogin':
-        // Llamar a la función obtenerManagerPorLogin() y devolver el resultado
-        $login = $input['login'];
-        $managerPorLogin = obtenerManagerPorLogin($login);
-        echo json_encode($managerPorLogin);
-        break;
+      // Llamar a la función obtenerManagerPorLogin() y devolver el resultado
+      $login = $input['login'];
+      $managerPorLogin = obtenerManagerPorLogin($login);
+      echo json_encode($managerPorLogin);
+      break;
 
     default:
       // El código original para el inicio de sesión
