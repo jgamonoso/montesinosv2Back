@@ -42,6 +42,20 @@
 		return NULL;
 	}
 
+	function obtenerNumJugadoresConContratoEquipo($pkEquipo)
+	{
+		$sql = "SELECT COUNT(DISTINCT c.fk_contrato_jugadorliga) AS num_jugadores FROM equipo e INNER JOIN contrato c ON e.pk_equipo = c.fk_contrato_equipo WHERE e.pk_equipo =" . $pkEquipo . " AND c.contrato_lld = 0 AND c.contrato_covid = 0 AND c.contrato_activo = 1";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+			return $row["num_jugadores"];
+		}
+
+		return 0;
+	}
+
 	function obtenerJugadoresConDerechoEquipo($pkEquipo)
 	{
 		$sql = "select * from jugadorliga where pk_jugadorliga in (select distinct(fk_derecho_jugadorliga) from derecho where fk_derecho_equipo=".$pkEquipo.")";

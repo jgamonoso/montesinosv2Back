@@ -59,4 +59,26 @@
 		return NULL;
 	}
 
+	function obtenerDatosListadoEquipos($pkManager)
+	{
+		$sql = "select * from equipo where fk_equipo_manager=".$pkManager;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			$eq = new Equipo();
+			$eq->pkEquipo = $row["pk_equipo"];
+			$eq->nombre = $row["equipo_nombre"];
+			$eq->capLibre = $row["equipo_cap_libre"];
+			$eq->waiver = $row["equipo_waiver"];
+			$eq->numJugadoresConContrato = obtenerNumJugadoresConContratoEquipo($eq->pkEquipo);
+
+			return $eq;
+		}
+
+		return NULL;
+	}
+
 ?>

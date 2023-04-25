@@ -77,4 +77,61 @@
 
 		return NULL;
 	}
+
+	// function obtenerListaManagersConEquipo($pkLiga)
+	// {
+	// 	$sql = "select * from manager where pk_manager in (select fk_equipo_manager from equipo where fk_equipo_liga = ".$pkLiga.") order by manager_nombre";
+
+	// 	$result = consultarSql($sql);
+
+	// 	if ($result->num_rows > 0)
+	// 	{
+	// 		$listaManagers = array();
+
+	// 		while ($row = $result->fetch_assoc())
+	// 		{
+	// 			$man = new Manager();
+	// 			$man->pkManager = $row["pk_manager"];
+	// 			$man->nombre = $row["manager_nombre"];
+	// 			$man->mail = $row["manager_email"];
+	// 			$man->login = $row["manager_login"];
+
+	// 			$man->grupo = obtenerGrupo($row["fk_manager_grupo"]);
+
+	// 			$man->equipo = obtenerEquipo($man->pkManager);
+
+	// 			array_push($listaManagers, $man);
+	// 		}
+
+	// 		return $listaManagers;
+	// 	}
+
+	// 	return NULL;
+	// }
+
+	function obtenerListadoManagersConEquipo($pkLiga)
+	{
+		$sql = "select * from manager where pk_manager in (select fk_equipo_manager from equipo where fk_equipo_liga = ".$pkLiga.") order by manager_nombre";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0)
+		{
+			$listaManagers = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$man = new Manager();
+        $man->pkManager = $row["pk_manager"];
+        $man->nombre = $row["manager_nombre"];
+				$man->equipo = obtenerDatosListadoEquipos($man->pkManager);
+
+				array_push($listaManagers, $man);
+			}
+
+			return $listaManagers;
+		}
+
+		return NULL;
+	}
 ?>
