@@ -4,9 +4,42 @@
 	require_once __DIR__ . '/gestorjugador.php';
 	require_once __DIR__ . '/gestorcontrato.php';
 	require_once __DIR__ . '/gestorderecho.php';
+	require_once __DIR__ . '/gestornoticia.php';
+	require_once __DIR__ . '/gestorsuceso.php';
+	require_once __DIR__ . '/gestorequipo.php';
 	// require_once("/home/montesinyy/www/gestores/gestorposicion.php");
 	// require_once("/home/montesinyy/www/gestores/gestortemporada.php");
-	// require_once("/home/montesinyy/www/gestores/gestorsuceso.php");
+
+	function obtenerJugadorliga($pkJugadorliga)
+	{
+		$sql = "select * from jugadorliga where pk_jugadorliga=".$pkJugadorliga;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			$jugadorliga = new Jugadorliga();
+			$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+			$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+			$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+			$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+			$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+			$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+			$jugadorliga->contrato = obtenerContratoJugador($pkJugadorliga);
+			$jugadorliga->derecho = obtenerDerechoJugador($pkJugadorliga);
+
+			$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+			$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+
+			return $jugadorliga;
+		}
+
+		return NULL;
+	}
+
 
 	function obtenerJugadoresConContratoEquipo($pkEquipo)
 	{
@@ -190,5 +223,26 @@
 		}
 
 		return NULL;
+	}
+
+	function activarILDeJugador($pkManager, $pkJugadorliga, $pkLiga, $pkEquipo)
+	{
+		$sql = "update contrato set contrato_activo=0 where fk_contrato_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		$sql = "update jugadorliga set jugadorliga_tradingblock=0 where pk_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		altaNoticia("<b>".obtenerNombreEquipo($pkEquipo)."</b>: IL activada para <b>".obtenerJugadorliga($pkJugadorliga)->jugador->nombre." ".obtenerJugadorliga($pkJugadorliga)->jugador->apellido."</b>", 3, $pkLiga);			
+		crearSuceso($pkManager, "NULL", "ACTIVAR_IL_JUGADOR", $pkJugadorliga);
+	}
+
+	function recuperarJugadordeIL($pkManager, $pkJugadorliga, $pkLiga, $pkEquipo)
+	{
+		$sql = "update contrato set contrato_activo=1 where fk_contrato_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		altaNoticia("<b>".obtenerJugadorliga($pkJugadorliga)->jugador->nombre." ".obtenerJugadorliga($pkJugadorliga)->jugador->apellido."</b> recuperado de IL por <b>".obtenerNombreEquipo($pkEquipo)."</b>.", 3, $pkLiga);			
+		crearSuceso($pkManager, "NULL", "RECUPERAR_IL_JUGADOR", $pkJugadorliga);
 	}
 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../gestores/gestornoticias.php';
+require_once __DIR__ . '/../gestores/gestornoticia.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");

@@ -81,4 +81,20 @@
 		return NULL;
 	}
 
+	function obtenerNombreEquipo($pkEquipo)
+	{
+		$nombre = "";
+		$sql = "select equipo_nombre from equipo where pk_equipo=".$pkEquipo;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			$nombre = $row["equipo_nombre"];
+		}
+
+		return $nombre;
+	}
+
 ?>

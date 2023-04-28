@@ -46,4 +46,11 @@
 
 		return NULL;
 	}
+
+	function altaNoticia($texto, $prioridad, $pkLiga)
+	{
+		$sql = "insert into noticia (noticia_texto, noticia_fecha, noticia_hora, noticia_prioridad, fk_noticia_liga) values ('".$texto."', '".date('Ymd')."', '".date('H:i')."', ".$prioridad.", ".$pkLiga.")";
+
+		ejecutarSql($sql);
+	}
 ?>
