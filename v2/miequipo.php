@@ -51,7 +51,7 @@ if ($method === 'POST') {
       $fkLiga = $input['fkLiga'];
       $pkEquipo = $input['pkEquipo'];
 
-      $activarILDeJugador = activarILDeJugador($managerId, $jugadorId, $fkLiga, $pkEquipo,);
+      $activarILDeJugador = activarILDeJugador($managerId, $jugadorId, $fkLiga, $pkEquipo);
       echo json_encode($activarILDeJugador);
       break;
 
@@ -62,7 +62,7 @@ if ($method === 'POST') {
       $fkLiga = $input['fkLiga'];
       $pkEquipo = $input['pkEquipo'];
 
-      $recuperarJugadordeIL = recuperarJugadordeIL($managerId, $jugadorId, $fkLiga, $pkEquipo,);
+      $recuperarJugadordeIL = recuperarJugadordeIL($managerId, $jugadorId, $fkLiga, $pkEquipo);
       echo json_encode($recuperarJugadordeIL);
       break;
 
