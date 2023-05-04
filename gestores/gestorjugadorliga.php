@@ -7,6 +7,7 @@
 	require_once __DIR__ . '/gestornoticia.php';
 	require_once __DIR__ . '/gestorsuceso.php';
 	require_once __DIR__ . '/gestorequipo.php';
+	require_once __DIR__ . '/gestorwaiver.php';
 	// require_once("/home/montesinyy/www/gestores/gestorposicion.php");
 	// require_once("/home/montesinyy/www/gestores/gestortemporada.php");
 
@@ -244,5 +245,73 @@
 
 		altaNoticia("<b>".obtenerJugadorliga($pkJugadorliga)->jugador->nombre." ".obtenerJugadorliga($pkJugadorliga)->jugador->apellido."</b> recuperado de IL por <b>".obtenerNombreEquipo($pkEquipo)."</b>.", 3, $pkLiga);			
 		crearSuceso($pkManager, "NULL", "RECUPERAR_IL_JUGADOR", $pkJugadorliga);
+	}
+
+	function obtenerListaJugadoresBuscadosFUSION($pkLiga, $filtro)
+	{
+		$sql = "SELECT jugadorliga.*, jugador_apellido,
+				(CASE
+					WHEN pk_jugadorliga NOT IN (SELECT DISTINCT(fk_derecho_jugadorliga) FROM derecho)
+					AND pk_jugadorliga NOT IN (SELECT DISTINCT(fk_contrato_jugadorliga) FROM contrato)
+					AND jugadorliga_drafteable = 0 THEN 'AL'
+					WHEN pk_jugadorliga IN (SELECT DISTINCT(fk_contrato_jugadorliga) FROM contrato WHERE contrato_lld = 0 AND contrato_covid = 0) THEN 'CONTRATO'
+					WHEN pk_jugadorliga IN (SELECT fk_derecho_jugadorliga FROM derecho) THEN 'DERECHO'
+					WHEN pk_jugadorliga IN (SELECT DISTINCT(fk_contrato_jugadorliga) FROM contrato WHERE contrato_lld = 1) THEN 'LLD'
+					WHEN pk_jugadorliga IN (SELECT DISTINCT(fk_contrato_jugadorliga) FROM contrato WHERE contrato_covid = 1) THEN 'COVID'
+					ELSE 'OTHER'
+				END) as tipo
+				FROM jugadorliga, jugador
+				WHERE fk_jugadorliga_liga = $pkLiga
+				AND fk_jugadorliga_jugador = pk_jugador
+				AND (jugador_nombre LIKE '%$filtro%' OR jugador_apellido LIKE '%$filtro%')
+				ORDER BY jugador_apellido";
+
+		$result = consultarSql($sql);
+
+		$listas = array(
+			'AL' => array(),
+			'CONTRATO' => array(),
+			'DERECHO' => array(),
+			'LLD' => array(),
+			'COVID' => array()
+		);
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+					$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+					$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+					$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+					$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+					$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+					$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+					$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+					$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+					$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+					$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
+
+					if ($jugadorliga->contrato !== null) {
+						$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+					} elseif ($jugadorliga->derecho !== null) {
+						$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+					} else {
+						$jugadorliga->equipoLiga = '';
+					}
+
+				$listas[$row['tipo']][] = $jugadorliga;
+			}
+		}
+
+		return array(
+			'listaALJugadores' => $listas['AL'],
+			'listaJugadores' => $listas['CONTRATO'],
+			'listaDerechos' => $listas['DERECHO'],
+			'listaOFS' => $listas['LLD'],
+			'listaCOVID' => $listas['COVID']
+		);
 	}
 ?>
