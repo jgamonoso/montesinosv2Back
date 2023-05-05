@@ -124,7 +124,7 @@
 		return NULL;
 	}
 
-	function obtenerJugadoresLesionados($pkEquipo)
+	function obtenerJugadoresLesionadosEquipo($pkEquipo)
 	{
 		$sql = "select jugadorliga.*, jugador_apellido from jugadorliga,jugador where fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_contrato_jugadorliga from contrato where fk_contrato_equipo=".$pkEquipo." and contrato_lld=1) order by jugador_apellido";
 
@@ -313,5 +313,160 @@
 			'listaOFS' => $listas['LLD'],
 			'listaCOVID' => $listas['COVID']
 		);
+	}
+
+	function obtenerJugadoresLLDConContrato($pkLiga)
+	{
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,jugador_nombre from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=1) order by jugador_nombre, jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=1) order by fk_jugador_equiponba, jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select distinct jugadorliga.*,jugador_apellido from jugadorliga,jugador,posicion where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=1) AND (pk_posicion IN(SELECT fk_posicion FROM jugador_posicion WHERE fk_jugador = fk_jugadorliga_jugador)) order by posicion.pk_posicion, jugador_apellido";
+		// } else {
+			$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=1) order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
+
+				if ($jugadorliga->contrato !== null) {
+					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+				} elseif ($jugadorliga->derecho !== null) {
+					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+				} else {
+					$jugadorliga->equipoLiga = '';
+				}
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
+
+	function obtenerJugadoresCOVIDConContrato($pkLiga)
+	{
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,jugador_nombre from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_covid=1) order by jugador_nombre, jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_covid=1) order by fk_jugador_equiponba, jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select distinct jugadorliga.*,jugador_apellido from jugadorliga,jugador,posicion where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_covid=1) AND (pk_posicion IN(SELECT fk_posicion FROM jugador_posicion WHERE fk_jugador = fk_jugadorliga_jugador)) order by posicion.pk_posicion, jugador_apellido";
+		// } else {
+			$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_covid=1) order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
+
+				if ($jugadorliga->contrato !== null) {
+					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+				} elseif ($jugadorliga->derecho !== null) {
+					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+				} else {
+					$jugadorliga->equipoLiga = '';
+				}
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
+
+	function obtenerJugadoresILLiga($pkLiga)
+	{
+		$sql = "    select jugadorliga.*, jugador_apellido from jugadorliga,jugador where fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_contrato_jugadorliga from contrato where fk_jugadorliga_liga=".$pkLiga." and contrato_activo=0) order by jugador_apellido";
+
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*, jugador_apellido,jugador_nombre from jugadorliga,jugador where fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_contrato_jugadorliga from contrato where fk_jugadorliga_liga=".$pkLiga." and contrato_activo=0 AND contrato_covid = 0) order by jugador_nombre, jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*, jugador_apellido,fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_contrato_jugadorliga from contrato where fk_jugadorliga_liga=".$pkLiga." and contrato_activo=0 AND contrato_covid = 0) order by fk_jugador_equiponba, jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select distinct jugadorliga.*, jugador_apellido from jugadorliga,jugador,posicion where fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_contrato_jugadorliga from contrato where fk_jugadorliga_liga=".$pkLiga." and contrato_activo=0 AND contrato_covid = 0) AND (pk_posicion IN(SELECT fk_posicion FROM jugador_posicion WHERE fk_jugador = fk_jugadorliga_jugador))order by posicion.pk_posicion, jugador_apellido";
+		// } else {
+		// 	$sql = "select jugadorliga.*, jugador_apellido from jugadorliga,jugador where fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_contrato_jugadorliga from contrato where fk_jugadorliga_liga=".$pkLiga." and contrato_activo=0 AND contrato_covid = 0) order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
+
+				if ($jugadorliga->contrato !== null) {
+					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+				} elseif ($jugadorliga->derecho !== null) {
+					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+				} else {
+					$jugadorliga->equipoLiga = '';
+				}
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
 	}
 ?>

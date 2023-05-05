@@ -40,7 +40,7 @@
 
 			$eq->jugadoresConContrato = obtenerJugadoresConContratoEquipo($eq->pkEquipo);
 			$eq->jugadoresIL = obtenerJugadoresIL($eq->pkEquipo);
-			$eq->jugadoresLesionados = obtenerJugadoresLesionados($eq->pkEquipo);
+			$eq->jugadoresLesionados = obtenerJugadoresLesionadosEquipo($eq->pkEquipo);
 			$eq->jugadoresCovid = obtenerJugadoresCOVID($eq->pkEquipo);
 			$eq->jugadoresConDerecho = obtenerJugadoresConDerechoEquipo($eq->pkEquipo);
 			$eq->draftpicks = obtenerDraftpicksEquipo($eq->pkEquipo);

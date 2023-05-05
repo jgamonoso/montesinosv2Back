@@ -66,6 +66,38 @@ if ($method === 'POST') {
       echo json_encode($recuperarJugadordeIL);
       break;
 
+    case 'obtenerJugadoresLesionadosEquipo':
+      // Llamar a la función obtenerJugadoresLesionadosEquipo()
+      $pkEquipo = $input['pkEquipo'];
+
+      $jugadoresLesionados = obtenerJugadoresLesionadosEquipo($pkEquipo);
+      echo json_encode($jugadoresLesionados);
+      break;
+
+    case 'obtenerJugadoresLLDConContrato':
+      // Llamar a la función obtenerJugadoresLLDConContrato()
+      $pkLiga = $input['pkLiga'];
+
+      $jugadoresLLDConContrato = obtenerJugadoresLLDConContrato($pkLiga);
+      echo json_encode($jugadoresLLDConContrato);
+      break;
+
+    case 'obtenerJugadoresCOVIDConContrato':
+      // Llamar a la función obtenerJugadoresCOVIDConContrato()
+      $pkLiga = $input['pkLiga'];
+
+      $jugadoresCOVIDConContrato = obtenerJugadoresCOVIDConContrato($pkLiga);
+      echo json_encode($jugadoresCOVIDConContrato);
+      break;
+
+    case 'obtenerJugadoresILLiga':
+      // Llamar a la función obtenerJugadoresILLiga()
+      $pkLiga = $input['pkLiga'];
+
+      $jugadoresILLiga = obtenerJugadoresILLiga($pkLiga);
+      echo json_encode($jugadoresILLiga);
+      break;
+
     default:
       break;
   }
