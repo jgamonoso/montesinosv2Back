@@ -44,4 +44,76 @@
 
 		return NULL;
 	}
+
+	function obtenerListaDraftpicks($pkLiga)
+	{
+		$sql = "select * from draftpick where fk_draftpick_liga=".$pkLiga." and fk_draftpick_jugadorliga_elegido IS NULL order by fk_draftpick_temporada DESC, draftpick_numronda, draftpick_numpick, pk_draftpick";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0)
+		{
+			$listaDraftpicks = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$pick = new DraftPick();
+				$pick->pkDraftpick = $row["pk_draftpick"];
+				$pick->fkTemporada = $row["fk_draftpick_temporada"];
+				$pick->fkEquipoOri = $row["fk_draftpick_equipo_ori"];
+				$pick->fkEquipoDest = $row["fk_draftpick_equipo_dest"];
+				$pick->fkLiga = $row["fk_draftpick_liga"];
+
+				$pick->numRonda = $row["draftpick_numronda"];
+				$pick->numPick = $row["draftpick_numpick"];
+
+				$pick->enTradingBlock = ($row["draftpick_tradingblock"] != "0");
+
+				$pick->fkJugadorligaPreferido = $row["fk_draftpick_jugadorliga_preferido"];
+				$pick->fkJugadorligaElegido = $row["fk_draftpick_jugadorliga_elegido"];
+
+				array_push($listaDraftpicks, $pick);
+			}
+
+			return $listaDraftpicks;
+		}
+
+		return NULL;
+	}
+
+	function obtenerListaDraftpicksTradingBlock($pkLiga)
+	{
+		$sql = "select * from draftpick where fk_draftpick_liga=".$pkLiga." and draftpick_tradingblock=1 order by fk_draftpick_temporada";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0)
+		{
+			$listaDraftpicks = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$pick = new DraftPick();
+				$pick->pkDraftPick = $row["pk_draftpick"];
+				$pick->fkTemporada = $row["fk_draftpick_temporada"];
+				$pick->fkEquipoOri = $row["fk_draftpick_equipo_ori"];
+				$pick->fkEquipoDest = $row["fk_draftpick_equipo_dest"];
+				$pick->fkLiga = $row["fk_draftpick_liga"];
+
+				$pick->numRonda = $row["draftpick_numronda"];
+				$pick->numPick = $row["draftpick_numpick"];
+
+				$pick->enTradingBlock = ($row["draftpick_tradingblock"] != "0");
+
+				$pick->fkJugadorligaPreferido = $row["fk_draftpick_jugadorliga_preferido"];
+				$pick->fkJugadorligaElegido = $row["fk_draftpick_jugadorliga_elegido"];
+
+				array_push($listaDraftpicks, $pick);
+			}
+
+			return $listaDraftpicks;
+		}
+
+		return NULL;
+	}
 ?>

@@ -97,4 +97,29 @@
 		return $nombre;
 	}
 
+	function obtenerListaEquiposNombre()
+	{
+		$sql = "select * from equipo";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$listaEquipos = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$eq = new Equipo();
+				$eq->pkEquipo = $row["pk_equipo"];
+				$eq->nombre = $row["equipo_nombre"];
+
+				array_push($listaEquipos, $eq);
+			}
+
+			return $listaEquipos;
+		}
+
+		return NULL;
+	}
+
 ?>

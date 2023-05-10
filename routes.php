@@ -9,6 +9,7 @@ function getRoutes()
         '/api/v2/noticias' => 'v2/noticias.php',
         '/api/v2/dashboard' => 'v2/dashboard.php',
         '/api/v2/miequipo' => 'v2/miequipo.php',
+        '/api/v2/mercado' => 'v2/mercado.php',
         '/api/v2/liga' => 'v2/liga.php',
     ];
 

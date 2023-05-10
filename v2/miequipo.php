@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../gestores/gestormanager.php';
 require_once __DIR__ . '/../gestores/gestortemporada.php';
 require_once __DIR__ . '/../gestores/gestorparametro.php';
+require_once __DIR__ . '/../gestores/gestorjugadorliga.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");

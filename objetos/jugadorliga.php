@@ -17,6 +17,6 @@ class Jugadorliga
 	public $enTradingBlock;
 	public $drafteable;
 	public $waiver; // Añadido por mi
-	public $equipoLiga; // Añadido por mi
+	// public $equipoLiga; // Añadido por mi
 }
 ?>

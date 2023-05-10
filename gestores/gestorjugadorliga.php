@@ -294,13 +294,13 @@
 					$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
 					$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
 
-					if ($jugadorliga->contrato !== null) {
-						$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
-					} elseif ($jugadorliga->derecho !== null) {
-						$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
-					} else {
-						$jugadorliga->equipoLiga = '';
-					}
+					// if ($jugadorliga->contrato !== null) {
+					// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+					// } elseif ($jugadorliga->derecho !== null) {
+					// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+					// } else {
+					// 	$jugadorliga->equipoLiga = '';
+					// }
 
 				$listas[$row['tipo']][] = $jugadorliga;
 			}
@@ -350,13 +350,13 @@
 				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
 				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
 
-				if ($jugadorliga->contrato !== null) {
-					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
-				} elseif ($jugadorliga->derecho !== null) {
-					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
-				} else {
-					$jugadorliga->equipoLiga = '';
-				}
+				// if ($jugadorliga->contrato !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+				// } elseif ($jugadorliga->derecho !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+				// } else {
+				// 	$jugadorliga->equipoLiga = '';
+				// }
 
 				array_push($listaJugadores, $jugadorliga);
 			}
@@ -401,13 +401,13 @@
 				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
 				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
 
-				if ($jugadorliga->contrato !== null) {
-					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
-				} elseif ($jugadorliga->derecho !== null) {
-					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
-				} else {
-					$jugadorliga->equipoLiga = '';
-				}
+				// if ($jugadorliga->contrato !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+				// } elseif ($jugadorliga->derecho !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+				// } else {
+				// 	$jugadorliga->equipoLiga = '';
+				// }
 
 				array_push($listaJugadores, $jugadorliga);
 			}
@@ -454,13 +454,190 @@
 				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
 				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
 
-				if ($jugadorliga->contrato !== null) {
-					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
-				} elseif ($jugadorliga->derecho !== null) {
-					$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
-				} else {
-					$jugadorliga->equipoLiga = '';
-				}
+				// if ($jugadorliga->contrato !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+				// } elseif ($jugadorliga->derecho !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+				// } else {
+				// 	$jugadorliga->equipoLiga = '';
+				// }
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
+
+	function obtenerJugadoresConContrato($pkLiga)
+	{
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,jugador_nombre from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0 and contrato_covid=0) order by jugador_nombre, jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0 and contrato_covid=0) order by fk_jugador_equiponba, jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select distinct jugadorliga.*,jugador_apellido from jugadorliga,jugador,posicion where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0 and contrato_covid=0) AND (pk_posicion IN(SELECT fk_posicion FROM jugador_posicion WHERE fk_jugador = fk_jugadorliga_jugador)) order by posicion.pk_posicion, jugador_apellido";
+		// } else {
+			$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0 and contrato_covid=0) order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				// $jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
+
+				// if ($jugadorliga->contrato !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->contrato->fkEquipo);
+				// } elseif ($jugadorliga->derecho !== null) {
+				// 	$jugadorliga->equipoLiga = obtenerNombreEquipo($jugadorliga->derecho->fkEquipo);
+				// } else {
+				// 	$jugadorliga->equipoLiga = '';
+				// }
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
+
+	function obtenerListaJugadoresConDerecho($pkLiga)
+	{
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido, jugador_nombre from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) order by jugador_nombre, jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido, fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) order by fk_jugador_equiponba, jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select distinct jugadorliga.*,jugador_apellido from jugadorliga,jugador,posicion where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) AND ( pk_posicion IN(SELECT fk_posicion FROM jugador_posicion WHERE  fk_jugador = fk_jugadorliga_jugador)) order by posicion.pk_posicion, jugador_apellido";
+		// } else {
+			$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
+
+	function obtenerListaJugadoresConDerechoTradingBlock($pkLiga)
+	{
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido, jugador_nombre from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) and jugadorliga_tradingblock=1 order by jugador_nombre, jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido, fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) and jugadorliga_tradingblock=1 order by fk_jugador_equiponba, jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select distinct jugadorliga.*,jugador_apellido from jugadorliga,jugador, posicion where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) and jugadorliga_tradingblock=1 AND ( pk_posicion IN(SELECT fk_posicion FROM jugador_posicion WHERE fk_jugador = fk_jugadorliga_jugador) ) order by posicion.pk_posicion, jugador_apellido";
+		// } else {
+			$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select fk_derecho_jugadorliga from derecho) and jugadorliga_tradingblock=1 order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
+
+	function obtenerListaJugadoresConContratoTradingBlock($pkLiga)
+	{
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido, jugador_nombre from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0) and jugadorliga_tradingblock=1 order by jugador_nombre, jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido, fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0) and jugadorliga_tradingblock=1 order by fk_jugador_equiponba, jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select distinct jugadorliga.*,jugador_apellido from jugadorliga,jugador, posicion where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0) and jugadorliga_tradingblock=1 AND ( pk_posicion IN(SELECT fk_posicion FROM jugador_posicion WHERE  fk_jugador = fk_jugadorliga_jugador) ) order by posicion.pk_posicion, jugador_apellido";
+		// } else {
+			$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and pk_jugadorliga in (select distinct(fk_contrato_jugadorliga) from contrato where contrato_lld=0) and jugadorliga_tradingblock=1 order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
 
 				array_push($listaJugadores, $jugadorliga);
 			}

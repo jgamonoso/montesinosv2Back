@@ -122,8 +122,8 @@
 			while ($row = $result->fetch_assoc())
 			{
 				$man = new Manager();
-        $man->pkManager = $row["pk_manager"];
-        $man->nombre = $row["manager_nombre"];
+				$man->pkManager = $row["pk_manager"];
+				$man->nombre = $row["manager_nombre"];
 				$man->equipo = obtenerDatosListadoEquipos($man->pkManager);
 
 				array_push($listaManagers, $man);

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../gestores/gestormanager.php';
+require_once __DIR__ . '/../gestores/gestorequipo.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -20,6 +21,11 @@ if ($method === 'POST') {
       $pkLiga = $input['pkLiga'];
       $listadoManagersConEquipo = obtenerListadoManagersConEquipo($pkLiga);
       echo json_encode($listadoManagersConEquipo);
+      break;
+    case 'obtenerListaEquiposNombre':
+      // Llamar a la función obtenerListaEquiposNombre() y devolver el resultado
+      $listaEquiposNombre = obtenerListaEquiposNombre();
+      echo json_encode($listaEquiposNombre);
       break;
 
     default:
