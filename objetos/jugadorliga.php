@@ -18,5 +18,6 @@ class Jugadorliga
 	public $drafteable;
 	public $waiver; // Añadido por mi
 	// public $equipoLiga; // Añadido por mi
+	public $subasta; // Añadido por mi
 }
 ?>

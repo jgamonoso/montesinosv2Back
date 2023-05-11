@@ -10,6 +10,7 @@ function getRoutes()
         '/api/v2/dashboard' => 'v2/dashboard.php',
         '/api/v2/miequipo' => 'v2/miequipo.php',
         '/api/v2/mercado' => 'v2/mercado.php',
+        '/api/v2/agencialibre' => 'v2/agencialibre.php',
         '/api/v2/liga' => 'v2/liga.php',
     ];
 
