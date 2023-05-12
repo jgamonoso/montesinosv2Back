@@ -46,8 +46,8 @@ if ($method === 'POST') {
         ];
       } else {
         $response = [
-            'status' => 'error',
-            'message' => 'Login error',
+          'status' => 'error',
+          'message' => 'Login error',
         ];
       }
 
