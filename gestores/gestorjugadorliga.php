@@ -695,4 +695,46 @@
 
 		return NULL;
 	}
+
+	function obtenerListaJugadoresRenovables($pkLiga)
+	{
+		// if ($ordenacion == "nombre"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,jugador_nombre from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and fk_jugadorliga_equipo_restringido is not NULL order by jugador_nombre,jugador_apellido";
+		// } else if ($ordenacion == "equipoNba"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido,fk_jugador_equiponba from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and fk_jugadorliga_equipo_restringido is not NULL order by fk_jugador_equiponba,jugador_apellido";
+		// } else if ($ordenacion == "posicion"){
+		// 	$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and fk_jugadorliga_equipo_restringido is not NULL order by jugador_apellido";
+		// } else {
+			$sql = "select jugadorliga.*,jugador_apellido from jugadorliga,jugador where fk_jugadorliga_liga=".$pkLiga." and fk_jugadorliga_jugador=pk_jugador and fk_jugadorliga_equipo_restringido is not NULL order by jugador_apellido";
+		// }
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
 ?>
