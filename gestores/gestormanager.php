@@ -134,4 +134,24 @@
 
 		return NULL;
 	}
+
+	function obtenerEmailsLiga($pkLiga)
+	{
+		$sql = "select manager_email from manager where pk_manager in (select fk_equipo_manager from equipo where fk_equipo_liga = ".$pkLiga.")";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$correos = "";
+			while ($row = $result->fetch_assoc())
+			{
+				if (!empty($correos)) $correos .= ",";
+				$correos .= $row["manager_email"];
+			}
+
+			return $correos;
+		}
+
+		return NULL;
+	}
 ?>

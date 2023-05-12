@@ -1,6 +1,8 @@
 <?php
 	require_once __DIR__ . '/../conexionbd.php';
 	require_once __DIR__ . '/../objetos/noticia.php';
+	require_once __DIR__ . '/gestorsuceso.php';
+	require_once __DIR__ . '/gestoremail.php';
 
 	function obtenerListaFechas($pagina)
 	{
@@ -52,5 +54,21 @@
 		$sql = "insert into noticia (noticia_texto, noticia_fecha, noticia_hora, noticia_prioridad, fk_noticia_liga) values ('".$texto."', '".date('Ymd')."', '".date('H:i')."', ".$prioridad.", ".$pkLiga.")";
 
 		ejecutarSql($sql);
+	}
+
+	function altaNoticiaComi($pkManager, $texto, $prioridad, $pkLiga)
+	{
+		if ($pkLiga === '-') {
+			altaNoticia($texto, $prioridad, 1);
+			enviarEmailLiga("Hay una nueva notificación del comisionado. Visita la web para más detalle.", 1);
+			altaNoticia($texto, $prioridad, 2);
+			enviarEmailLiga("Hay una nueva notificación del comisionado. Visita la web para más detalle.", 2);
+		} else {
+			altaNoticia($texto, $prioridad, $pkLiga);
+			enviarEmailLiga("Hay una nueva notificación del comisionado. Visita la web para más detalle.", $pkLiga);
+		}
+
+
+		crearSuceso($pkManager, "NULL", "NUEVA_NOTICIA", "");
 	}
 ?>
