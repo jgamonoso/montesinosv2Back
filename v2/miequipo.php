@@ -3,6 +3,8 @@ require_once __DIR__ . '/../gestores/gestormanager.php';
 require_once __DIR__ . '/../gestores/gestortemporada.php';
 require_once __DIR__ . '/../gestores/gestorparametro.php';
 require_once __DIR__ . '/../gestores/gestorjugadorliga.php';
+require_once __DIR__ . '/../gestores/gestorderecho.php';
+require_once __DIR__ . '/../gestores/gestordraftpick.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -66,6 +68,78 @@ if ($method === 'POST') {
       $recuperarJugadordeIL = recuperarJugadordeIL($managerId, $jugadorId, $fkLiga, $pkEquipo);
       echo json_encode($recuperarJugadordeIL);
       break;
+
+    case 'activarCovidDeJugador':
+      // Llamar a la función activarCovidDeJugador()
+      $managerId = $input['managerId'];
+      $jugadorId = $input['jugadorId'];
+      $fkLiga = $input['fkLiga'];
+      $pkEquipo = $input['pkEquipo'];
+
+      $activarCovidDeJugador = activarCovidDeJugador($managerId, $jugadorId, $fkLiga, $pkEquipo);
+      echo json_encode($activarCovidDeJugador);
+      break;
+
+    case 'recuperarJugadordeCovid':
+      // Llamar a la función recuperarJugadordeCovid()
+      $managerId = $input['managerId'];
+      $jugadorId = $input['jugadorId'];
+      $fkLiga = $input['fkLiga'];
+      $pkEquipo = $input['pkEquipo'];
+
+      $recuperarJugadordeCovid = recuperarJugadordeCovid($managerId, $jugadorId, $fkLiga, $pkEquipo);
+      echo json_encode($recuperarJugadordeCovid);
+      break;
+
+    case 'addTradingBlock':
+      // Llamar a la función addTradingBlock()
+      $managerId = $input['managerId'];
+      $pkEquipo = $input['pkEquipo'];
+      $jugadorId = $input['jugadorId'];
+      $derechoId = $input['derechoId'];
+      $draftPickId = $input['draftPickId'];
+
+      if ($jugadorId !== null) {
+          $addTradingBlock = addJugadorTradingBlock($managerId, $pkEquipo, $jugadorId);
+      } elseif ($derechoId !== null) {
+          $addTradingBlock = addDerechoTradingBlock($managerId, $pkEquipo, $derechoId);
+      } elseif ($draftPickId !== null) {
+          $addTradingBlock = addDraftpickTradingBlock($managerId, $pkEquipo, $draftPickId);
+      } else {
+          // Aquí puedes manejar el caso en el que todas las variables sean null
+          $addTradingBlock = "Todos los IDs son null";
+      }
+      echo json_encode($addTradingBlock);
+      break;
+
+    case 'recuperarDeTradingBlock':
+      // Llamar a la función recuperarDeTradingBlock()
+      $managerId = $input['managerId'];
+      $pkEquipo = $input['pkEquipo'];
+      $jugadorId = $input['jugadorId'];
+      $derechoId = $input['derechoId'];
+      $draftPickId = $input['draftPickId'];
+
+      if ($jugadorId !== null) {
+          $recuperarDeTradingBlock = quitarJugadorTradingBlock($managerId, $pkEquipo, $jugadorId);
+      } elseif ($derechoId !== null) {
+          $recuperarDeTradingBlock = quitarDerechoTradingBlock($managerId, $pkEquipo, $derechoId);
+      } elseif ($draftPickId !== null) {
+          $recuperarDeTradingBlock = quitarDraftpickTradingBlock($managerId, $pkEquipo, $draftPickId);
+      } else {
+          // Aquí puedes manejar el caso en el que todas las variables sean null
+          $recuperarDeTradingBlock = "Todos los IDs son null";
+      }
+
+      echo json_encode($recuperarDeTradingBlock);
+      break;
+
+
+
+
+
+
+
 
     case 'obtenerJugadoresLesionadosEquipo':
       // Llamar a la función obtenerJugadoresLesionadosEquipo()

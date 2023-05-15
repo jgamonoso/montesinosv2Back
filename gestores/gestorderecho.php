@@ -31,4 +31,20 @@
 		return NULL;
 	}
 
+
+	function addDerechoTradingBlock($pkManager, $pkEquipo, $pkJugadorliga)
+	{
+		$sql = "update jugadorliga set jugadorliga_tradingblock=1 where pk_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		crearSuceso($pkManager, $pkEquipo, "ADD_TRADBLOCK_DERECHO", $pkJugadorliga);
+	}
+
+	function quitarDerechoTradingBlock($pkManager, $pkEquipo, $pkJugadorliga)
+	{
+		$sql = "update jugadorliga set jugadorliga_tradingblock=0 where pk_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		crearSuceso($pkManager, $pkEquipo, "QUITAR_TRADBLOCK_DERECHO", $pkJugadorliga);
+	}
 ?>

@@ -247,6 +247,52 @@
 		crearSuceso($pkManager, "NULL", "RECUPERAR_IL_JUGADOR", $pkJugadorliga);
 	}
 
+	function activarCovidDeJugador($pkManager, $pkJugadorliga, $pkLiga, $pkEquipo)
+	{
+		$sql = "update contrato set contrato_covid=1 where fk_contrato_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		$sql = "update contrato set contrato_activo=0 where fk_contrato_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		$salario = 0;
+		$sql = "select contrato_salario from contrato where fk_contrato_jugadorliga=".$pkJugadorliga;
+		$result = consultarSql($sql);
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+			$salario = $row["contrato_salario"];
+		}
+
+		$sql = "update equipo set equipo_cap_libre=ROUND(equipo_cap_libre+".$salario.",1) where pk_equipo in (select fk_contrato_equipo from contrato where fk_contrato_jugadorliga=".$pkJugadorliga.")";
+		ejecutarSql($sql);
+
+		altaNoticia("<b>".obtenerNombreEquipo($pkEquipo)."</b>: COVID activada para <b>".obtenerJugadorliga($pkJugadorliga)->jugador->nombre." ".obtenerJugadorliga($pkJugadorliga)->jugador->apellido."</b>", 3, $pkLiga);			
+		crearSuceso($pkManager, "NULL", "ACTIVAR_COVID_JUGADOR", $pkJugadorliga);
+	}
+
+	function recuperarJugadordeCovid($pkManager, $pkJugadorliga, $pkLiga, $pkEquipo)
+	{
+		$sql = "update contrato set contrato_covid=0 where fk_contrato_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		$sql = "update contrato set contrato_activo=1 where fk_contrato_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		$salario = 0;
+		$sql = "select contrato_salario from contrato where fk_contrato_jugadorliga=".$pkJugadorliga;
+		$result = consultarSql($sql);
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+			$salario = $row["contrato_salario"];
+		}
+
+		$sql = "update equipo set equipo_cap_libre=ROUND(equipo_cap_libre-".$salario.",1) where pk_equipo in (select fk_contrato_equipo from contrato where fk_contrato_jugadorliga=".$pkJugadorliga.")";
+		ejecutarSql($sql);
+
+		altaNoticia("<b>".obtenerJugadorliga($pkJugadorliga)->jugador->nombre." ".obtenerJugadorliga($pkJugadorliga)->jugador->apellido."</b> recuperado de COVID por <b>".obtenerNombreEquipo($pkEquipo)."</b>.", 3, $pkLiga);			
+		crearSuceso($pkManager, "NULL", "RECUPERAR_COVID_JUGADOR", $pkJugadorliga);
+	}
+
 	function obtenerListaJugadoresBuscadosFUSION($pkLiga, $filtro)
 	{
 		$sql = "SELECT jugadorliga.*, jugador_apellido,
@@ -736,5 +782,21 @@
 		}
 
 		return NULL;
+	}
+
+	function addJugadorTradingBlock($pkManager, $pkEquipo, $pkJugadorliga)
+	{
+		$sql = "update jugadorliga set jugadorliga_tradingblock=1 where pk_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		crearSuceso($pkManager, $pkEquipo, "ADD_TRADBLOCK_JUGADOR", $pkJugadorliga);
+	}
+
+	function quitarJugadorTradingBlock($pkManager, $pkEquipo, $pkJugadorliga)
+	{
+		$sql = "update jugadorliga set jugadorliga_tradingblock=0 where pk_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		crearSuceso($pkManager, $pkEquipo, "QUITAR_TRADBLOCK_JUGADOR", $pkJugadorliga);
 	}
 ?>

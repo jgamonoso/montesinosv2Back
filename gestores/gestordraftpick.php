@@ -116,4 +116,20 @@
 
 		return NULL;
 	}
+
+	function addDraftpickTradingBlock($pkManager, $pkEquipo, $pkDraftpick)
+	{
+		$sql = "update draftpick set draftpick_tradingblock=1 where pk_draftpick=".$pkDraftpick;
+		ejecutarSql($sql);
+
+		crearSuceso($pkManager, $pkEquipo, "ADD_TRADBLOCK_DRAFTPICK", $pkDraftpick);
+	}
+
+	function quitarDraftpickTradingBlock($pkManager, $pkEquipo, $pkDraftpick)
+	{
+		$sql = "update draftpick set draftpick_tradingblock=0 where pk_draftpick=".$pkDraftpick;
+		ejecutarSql($sql);
+
+		crearSuceso($pkManager, $pkEquipo, "QUITAR_TRADBLOCK_DRAFTPICK", $pkDraftpick);
+	}
 ?>
