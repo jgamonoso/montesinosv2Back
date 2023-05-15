@@ -179,7 +179,7 @@
 		// crear waiver. a partir de ahora se hace waiver siempre que el corte sea fuera de la regular season o siempre que se haga en distinto dia al fichaje
 		if ($contrato->fecha != date('Ymd') || $temporadaActual->estado != "SEASON")
 		{
-			altaWaiver($pkJugadorliga,$pkEquipo,$jugadorliga->fkLiga);
+			altaWaiver($pkJugadorliga, $pkEquipo, $jugadorliga->fkLiga);
 		}
 
 		altaNoticia("<b>".obtenerNombreEquipo($pkEquipo)."</b> suelta al jugador <b>".obtenerJugadorliga($pkJugadorliga)->jugador->nombre." ".obtenerJugadorliga($pkJugadorliga)->jugador->apellido."</b>", 3,$jugadorliga->fkLiga);

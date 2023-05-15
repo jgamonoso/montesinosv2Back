@@ -29,7 +29,7 @@
 		return NULL;
 	}
 
-	function altaWaiver($pkJugadorliga,$pkEquipo,$pkLiga)
+	function altaWaiver($pkJugadorliga, $pkEquipo,$pkLiga)
 	{
 		$finWaiver = date("Ymd", strtotime('tomorrow'));
 		if (date("H")>8) $finWaiver = date("Ymd", strtotime("+2 days"));

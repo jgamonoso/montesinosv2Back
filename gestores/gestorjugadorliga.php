@@ -687,6 +687,8 @@
 				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
 				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
 
+				$jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
+
 				array_push($listaJugadores, $jugadorliga);
 			}
 			return $listaJugadores;
@@ -775,6 +777,8 @@
 
 				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
 				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+
+				// $jugadorliga->waiver = obtenerWaiver($jugadorliga->pkJugadorliga);
 
 				array_push($listaJugadores, $jugadorliga);
 			}
