@@ -64,4 +64,20 @@
 		return NULL;
 	}
 
+	function obtenerNombreTemporada($pkTemporada)
+	{
+		$nombre = "";
+		$sql = "select temporada_nombre from temporada where pk_temporada=".$pkTemporada;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			$nombre = $row["temporada_nombre"];
+		}
+
+		return $nombre;
+	}
+
 ?>

@@ -28,4 +28,13 @@
 
 		return NULL;
 	}
+
+	function altaWaiver($pkJugadorliga,$pkEquipo,$pkLiga)
+	{
+		$finWaiver = date("Ymd", strtotime('tomorrow'));
+		if (date("H")>8) $finWaiver = date("Ymd", strtotime("+2 days"));
+
+		$sql = "insert into waiver (fk_waiver_equipo, fk_waiver_jugadorliga, fk_waiver_liga, waiver_fecha_ini, waiver_fecha_fin) values (".$pkEquipo.",".$pkJugadorliga.",".$pkLiga.",'".date('Ymd')."','".$finWaiver."') ";
+		ejecutarSql($sql);
+	}
 ?>

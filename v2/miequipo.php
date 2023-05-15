@@ -5,6 +5,7 @@ require_once __DIR__ . '/../gestores/gestorparametro.php';
 require_once __DIR__ . '/../gestores/gestorjugadorliga.php';
 require_once __DIR__ . '/../gestores/gestorderecho.php';
 require_once __DIR__ . '/../gestores/gestordraftpick.php';
+require_once __DIR__ . '/../gestores/gestorequipo.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -134,12 +135,16 @@ if ($method === 'POST') {
       echo json_encode($recuperarDeTradingBlock);
       break;
 
+    case 'dropJugador':
+      // Llamar a la función dropJugador()
+      $managerId = $input['managerId'];
+      $jugadorId = $input['jugadorId'];
+      $pkEquipo = $input['pkEquipo'];
+      $sancionAplicable = $input['sancionAplicable'];
 
-
-
-
-
-
+      $dropJugador = dropJugador($managerId, $jugadorId, $pkEquipo, $sancionAplicable);
+      echo json_encode($dropJugador);
+      break;
 
     case 'obtenerJugadoresLesionadosEquipo':
       // Llamar a la función obtenerJugadoresLesionadosEquipo()

@@ -1,9 +1,11 @@
 <?php
 	require_once __DIR__ . '/../conexionbd.php';
 	require_once __DIR__ . '/../objetos/sancion.php';
-	// require_once("/home/montesinyy/www/gestores/gestortemporada.php");
-	// require_once("/home/montesinyy/www/gestores/gestoremail.php");
-	// require_once("/home/montesinyy/www/gestores/gestorsuceso.php");
+	require_once __DIR__ . '/gestortemporada.php';
+	require_once __DIR__ . '/gestoremail.php';
+	require_once __DIR__ . '/gestorsuceso.php';
+	require_once __DIR__ . '/gestorequipo.php';
+	require_once __DIR__ . '/gestornoticia.php';
 
 	function obtenerSancionesEquipo($pkEquipo)
 	{
@@ -32,5 +34,35 @@
 		}
 
 		return NULL;
+	}
+
+	function altaSancion($equipo, $cantidad, $temporada, $motivo, $pkLiga)
+	{
+		$sql = "insert into sancion (fk_sancion_equipo, fk_sancion_temporada, sancion_fecha, sancion_motivo, sancion_cantidad) values (".$equipo.", ".$temporada.", '".date('Ymd')."', '".$motivo."', ".$cantidad.")";
+
+		ejecutarSql($sql);
+
+		$temporadaActual = obtenerTemporadaActual();
+
+		if ($temporada == $temporadaActual->pkTemporada)
+		{
+			$sql = "update equipo set equipo_cap_libre=ROUND(equipo_cap_libre - ".$cantidad.",1) where pk_equipo=".$equipo;
+			ejecutarSql($sql);
+		}
+
+		enviarEmail($equipo, "Tu equipo ".obtenerNombreEquipo($equipo)." ha sido sancionado con ".$cantidad."M por ".$motivo.".");
+
+		$sql = "select equipo_cap_libre from equipo where pk_equipo=".$equipo;
+		$result = consultarSql($sql);
+		$row = $result->fetch_assoc();
+		$capLibre = $row["equipo_cap_libre"];
+
+		if ($capLibre < 0)
+		{
+			// enviar email
+			enviarEmailComi($equipo, "Tu equipo ".obtenerNombreEquipo($equipo)." ha sobrepasado el límite salarial. Dispones de 48h para regularizar el equipo.");
+		}
+
+		altaNoticia("Sanci&oacute;n de <b>".$cantidad."M</b> para <b>".obtenerNombreEquipo($equipo)."</b> durante la temporada <b>".obtenerNombreTemporada($temporada)."</b> por: <i>".$motivo."</i>", 2, $pkLiga);
 	}
 ?>

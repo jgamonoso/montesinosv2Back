@@ -135,6 +135,41 @@
 		return NULL;
 	}
 
+	function obtenerEmailManagerPorEquipo($pkEquipo)
+	{
+		$sql = "select manager_email from manager where pk_manager in (select fk_equipo_manager from equipo where pk_equipo='".$pkEquipo."')";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			return $row["manager_email"];
+		}
+
+		return NULL;
+	}
+
+	function obtenerEmailComis()
+	{
+		$sql = "select manager_email from manager where fk_manager_grupo <> 2";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$correosComis = "";
+			while ($row = $result->fetch_assoc())
+			{
+				if (!empty($correosComis)) $correosComis .= ",";
+				$correosComis .= $row["manager_email"];
+			}
+
+			return $correosComis;
+		}
+
+		return NULL;
+	}
+
 	function obtenerEmailsLiga($pkLiga)
 	{
 		$sql = "select manager_email from manager where pk_manager in (select fk_equipo_manager from equipo where fk_equipo_liga = ".$pkLiga.")";
