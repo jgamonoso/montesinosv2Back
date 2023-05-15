@@ -59,12 +59,12 @@
 	function altaNoticiaComi($pkManager, $texto, $prioridad, $pkLiga)
 	{
 		if ($pkLiga === '-') {
-			altaNoticia($texto, $prioridad, 1);
+			altaNoticia("<b>Noticia generada por el Comisionado</b>: " . $texto, $prioridad, 1);
 			enviarEmailLiga("Hay una nueva notificación del comisionado. Visita la web para más detalle.", 1);
-			altaNoticia($texto, $prioridad, 2);
+			altaNoticia("<b>Noticia generada por el Comisionado</b>: " . $texto, $prioridad, 2);
 			enviarEmailLiga("Hay una nueva notificación del comisionado. Visita la web para más detalle.", 2);
 		} else {
-			altaNoticia($texto, $prioridad, $pkLiga);
+			altaNoticia("<b>Noticia generada por el Comisionado</b>: " . $texto, $prioridad, $pkLiga);
 			enviarEmailLiga("Hay una nueva notificación del comisionado. Visita la web para más detalle.", $pkLiga);
 		}
 
