@@ -178,6 +178,14 @@ if ($method === 'POST') {
       echo json_encode($jugadoresILLiga);
       break;
 
+    case 'obtenerEquipoPorPk':
+      // Llamar a la función obtenerEquipoPorPk()
+      $pkEquipo = $input['pkEquipo'];
+
+      $equipo = obtenerEquipoPorPk($pkEquipo);
+      echo json_encode($equipo);
+      break;
+
     default:
       break;
   }

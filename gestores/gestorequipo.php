@@ -186,4 +186,45 @@
 
 		crearSuceso($pkManager,$pkEquipo, "DROP_JUGADOR", $pkJugadorliga);
 	}
+
+	function obtenerEquipoPorPk($pkEquipo)
+	{
+		$sql = "select * from equipo where pk_equipo=".$pkEquipo;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			$eq = new Equipo();
+			$eq->pkEquipo = $row["pk_equipo"];
+			$eq->nombre = $row["equipo_nombre"];
+			$eq->capLibre = $row["equipo_cap_libre"];
+			$eq->waiver = $row["equipo_waiver"];
+			$eq->fkLiga = $row["fk_equipo_liga"];
+
+			$eq->corteGratisHabilitado = $row["equipo_corte_gratis"];
+			$eq->bloqueado = $row["equipo_bloqueado"];
+			$eq->numMovesDisponibles = $row["equipo_moves_semanales"];
+
+			$eq->jugadoresConContrato = obtenerJugadoresConContratoEquipo($eq->pkEquipo);
+			$eq->jugadoresIL = obtenerJugadoresIL($eq->pkEquipo);
+			$eq->jugadoresLesionados = obtenerJugadoresLesionadosEquipo($eq->pkEquipo);
+			$eq->jugadoresCovid = obtenerJugadoresCOVID($eq->pkEquipo);
+			$eq->jugadoresConDerecho = obtenerJugadoresConDerechoEquipo($eq->pkEquipo);
+			$eq->draftpicks = obtenerDraftpicksEquipo($eq->pkEquipo);
+
+			$eq->sanciones = obtenerSancionesEquipo($eq->pkEquipo);
+			$eq->bonus = obtenerBonusEquipo($eq->pkEquipo);
+
+			$eq->apuesta = obtenerApuestaEquipo($eq->pkEquipo);
+
+			$eq->palmares = obtenerPalmaresEquipo($eq->pkEquipo);
+			$eq->records = obtenerRecordsEquipo($eq->pkEquipo);
+
+			return $eq;
+		}
+
+		return NULL;
+	}
 ?>
