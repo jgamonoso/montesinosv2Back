@@ -30,4 +30,20 @@
 
 		return NULL;
 	}
+
+	function obtenerNumClaimsEquipo($pkEquipo)
+	{
+		$sql = "select count(*) as numwaivers from waiverclaim where fk_waiverclaim_equipo=".$pkEquipo;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$row = $result->fetch_assoc();
+
+			return $row["numwaivers"];
+		}
+
+		return 0;
+	}
 ?>

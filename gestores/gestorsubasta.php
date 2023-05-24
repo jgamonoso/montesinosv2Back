@@ -30,4 +30,36 @@
 
 		return NULL;
 	}
+
+	function obtenerNumSubastasAbiertas($pkLiga)
+	{
+		$sql = "select count(*) as numsubastas from subasta where fk_subasta_liga = ".$pkLiga." and subasta_estado='ABIERTA' order by subasta_fecha_ini";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$row = $result->fetch_assoc();
+
+			return $row["numsubastas"];
+		}
+
+		return 0;
+	}
+
+	function obtenerNumSubastasAbiertasEquipo($pkEquipo)
+	{
+		$sql = "select count(*) as numsubastas from subasta where subasta_estado='ABIERTA' and pk_subasta in (select distinct(fk_puja_subasta) from puja where fk_puja_equipo = ".$pkEquipo.") order by subasta_fecha_ini";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$row = $result->fetch_assoc();
+
+			return $row["numsubastas"];
+		}
+
+		return 0;
+	}
 ?>

@@ -190,4 +190,36 @@
 
 		return NULL;
 	}
+
+	function obtenerNumOfertasRealizadasEquipo($pkEquipo1)
+	{
+		$sql = "select count(*) as numofertas from oferta where fk_oferta_equipo1=".$pkEquipo1;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$row = $result->fetch_assoc();
+
+			return $row["numofertas"];
+		}
+
+		return 0;
+	}
+
+	function obtenerNumOfertasRecibidasEquipo($pkEquipo2)
+	{
+		$sql = "select count(*) as numofertas from oferta where fk_oferta_equipo2=".$pkEquipo2;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$row = $result->fetch_assoc();
+
+			return $row["numofertas"];
+		}
+
+		return 0;
+	}
 ?>

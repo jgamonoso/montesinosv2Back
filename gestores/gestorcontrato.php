@@ -34,4 +34,20 @@
 
 		return NULL;
 	}
+
+	function obtenerNumLLDEquipo($pkEquipo)
+	{
+		$sql = "select count(*) as numlld from contrato where contrato_lld=1 and fk_contrato_equipo=".$pkEquipo;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$row = $result->fetch_assoc();
+
+			return $row["numlld"];
+		}
+
+		return 0;
+	}
 ?>
