@@ -803,4 +803,72 @@
 
 		crearSuceso($pkManager, $pkEquipo, "QUITAR_TRADBLOCK_JUGADOR", $pkJugadorliga);
 	}
+
+	function obtenerJugadoresOfertaEquipo($pkOferta, $pkEquipo)
+	{
+		$sql = "select * from jugadorliga where pk_jugadorliga in (select fk_contrato_jugadorliga from contrato where fk_contrato_equipo=".$pkEquipo." and pk_contrato in (select fk_oferta_contrato_contrato from oferta_contrato where fk_oferta_contrato_oferta = ".$pkOferta."))";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
+
+	function obtenerDerechosOfertaEquipo($pkOferta, $pkEquipo)
+	{
+		$sql = "select * from jugadorliga where pk_jugadorliga in (select fk_derecho_jugadorliga from derecho where fk_derecho_equipo=".$pkEquipo." and pk_derecho in (select fk_oferta_derecho_derecho from oferta_derecho where fk_oferta_derecho_oferta = ".$pkOferta."))";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaJugadores = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$jugadorliga = new Jugadorliga();
+				$jugadorliga->pkJugadorliga = $row["pk_jugadorliga"];
+				$jugadorliga->jugador = obtenerJugador($row["fk_jugadorliga_jugador"]);
+
+				$jugadorliga->fkLiga = $row["fk_jugadorliga_liga"];
+				$jugadorliga->fkEquipoQueloDropo = $row["fk_jugadorliga_equipo_drop"];
+				$jugadorliga->fkEquipoRestringido = $row["fk_jugadorliga_equipo_restringido"];
+				$jugadorliga->exequipoSalario = $row["jugadorliga_exequipo_salario"];
+
+				$jugadorliga->contrato = obtenerContratoJugador($jugadorliga->pkJugadorliga);
+				$jugadorliga->derecho = obtenerDerechoJugador($jugadorliga->pkJugadorliga);
+
+				$jugadorliga->enTradingBlock = ($row["jugadorliga_tradingblock"] != "0");
+				$jugadorliga->drafteable = ($row["jugadorliga_drafteable"] != "0");
+
+				array_push($listaJugadores, $jugadorliga);
+			}
+			return $listaJugadores;
+		}
+
+		return NULL;
+	}
 ?>

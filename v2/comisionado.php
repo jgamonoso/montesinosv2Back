@@ -32,7 +32,6 @@ if ($method === 'POST') {
         'status' => 'ok',
       ];
 
-
       echo json_encode($response);
       break;
 

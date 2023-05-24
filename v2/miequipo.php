@@ -186,6 +186,43 @@ if ($method === 'POST') {
       echo json_encode($equipo);
       break;
 
+    case 'crearOferta':
+      // Llamar a la función crearOferta()
+      $pkManager = $input['pkManager'];
+      $pkEquipo1 = $input['pkEquipo1'];
+      $listaJugadoresEquipo1 = $input['listaJugadoresEquipo1'];
+      $listaDerechosEquipo1 = $input['listaDerechosEquipo1'];
+      $listaDraftpicksEquipo1 = $input['listaDraftpicksEquipo1'];
+      $pkEquipo2 = $input['pkEquipo2'];
+      $listaJugadoresEquipo2 = $input['listaJugadoresEquipo2'];
+      $listaDerechosEquipo2 = $input['listaDerechosEquipo2'];
+      $listaDraftpicksEquipo2 = $input['listaDraftpicksEquipo2'];
+
+      crearOferta($pkManager, $pkEquipo1, $listaJugadoresEquipo1, $listaDerechosEquipo1, $listaDraftpicksEquipo1, $pkEquipo2, $listaJugadoresEquipo2, $listaDerechosEquipo2, $listaDraftpicksEquipo2);
+
+      $response = [
+        'status' => 'ok',
+      ];
+
+      echo json_encode($response);
+      break;
+
+    case 'obtenerListaOfertasRealizadas':
+      // Llamar a la función obtenerListaOfertasRealizadas()
+      $pkEquipo = $input['pkEquipo'];
+
+      $ofertasRealizadas = obtenerListaOfertasRealizadas($pkEquipo);
+      echo json_encode($ofertasRealizadas);
+      break;
+
+    case 'obtenerListaOfertasRecibidas':
+      // Llamar a la función obtenerListaOfertasRecibidas()
+      $pkEquipo = $input['pkEquipo'];
+
+      $ofertasRecibidas = obtenerListaOfertasRecibidas($pkEquipo);
+      echo json_encode($ofertasRecibidas);
+      break;
+
     default:
       break;
   }
