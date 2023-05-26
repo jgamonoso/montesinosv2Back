@@ -8,6 +8,36 @@
 	// require_once("/home/montesinyy/www/gestores/gestoremail.php");
 	// require_once("/home/montesinyy/www/gestores/gestorsuceso.php");
 
+	function obtenerOferta($pkOferta)
+	{
+		$sql = "select * from oferta where pk_oferta=".$pkOferta;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$row = $result->fetch_assoc();
+
+			$oferta = new Oferta();
+			$oferta->pkOferta = $row["pk_oferta"];
+			$oferta->fkEquipo1 = $row["fk_oferta_equipo1"];
+			$oferta->fkEquipo2 = $row["fk_oferta_equipo2"];
+			$oferta->fecha = $row["oferta_fecha"];
+
+			$oferta->jugadoresConContrato1 = obtenerJugadoresOfertaEquipo($oferta->pkOferta, $oferta->fkEquipo1);
+			$oferta->jugadoresConDerecho1 = obtenerDerechosOfertaEquipo($oferta->pkOferta, $oferta->fkEquipo1);
+			$oferta->draftpicks1 = obtenerDraftpicksOfertaEquipo($oferta->pkOferta, $oferta->fkEquipo1);
+
+			$oferta->jugadoresConContrato2 = obtenerJugadoresOfertaEquipo($oferta->pkOferta, $oferta->fkEquipo2);
+			$oferta->jugadoresConDerecho2 = obtenerDerechosOfertaEquipo($oferta->pkOferta, $oferta->fkEquipo2);
+			$oferta->draftpicks2 = obtenerDraftpicksOfertaEquipo($oferta->pkOferta, $oferta->fkEquipo2);
+
+			return $oferta;
+		}
+
+		return NULL;
+	}
+
 	function cancelarOfertasConContrato($pkContrato)
 	{
 		$sql = "select pk_oferta from oferta where pk_oferta in (select fk_oferta_contrato_oferta from oferta_contrato where fk_oferta_contrato_contrato = ".$pkContrato.")";
@@ -221,5 +251,66 @@
 		}
 
 		return 0;
+	}
+
+	function rechazarOferta($pkManager, $pkEquipo, $pkOferta)
+	{
+		$oferta = obtenerOferta($pkOferta);
+
+		cancelarOferta($pkOferta);
+
+		enviarEmail($oferta->fkEquipo1, "Tu propuesta de trade a ".obtenerNombreEquipo($oferta->fkEquipo2)." ha sido rechazada.");
+
+		crearSuceso($pkManager, $pkEquipo, "RECHAZAR_OFERTA", "Equipo1: ".$oferta->fkEquipo1." Equipo2: ".$oferta->fkEquipo2);
+	}
+
+	function aceptarOferta($pkManager, $pkEquipo, $pkOferta, $pkLiga)
+	{
+		$oferta = obtenerOferta($pkOferta);
+
+		crearTrade($pkManager, $oferta->fkEquipo1,$oferta->jugadoresConContrato1,$oferta->jugadoresConDerecho1,$oferta->draftpicks1,$oferta->fkEquipo2,$oferta->jugadoresConContrato2,$oferta->jugadoresConDerecho2,$oferta->draftpicks2,$pkLiga);
+
+		cancelarOferta($pkOferta);
+
+		enviarEmailComi($oferta->fkEquipo1, "Tu propuesta de trade a ".obtenerNombreEquipo($oferta->fkEquipo2)." ha sido aceptada. El trade será evaluado por el comisionado.");
+
+		crearSuceso($pkManager, $pkEquipo, "ACEPTAR_OFERTA", "Equipo1: ".$oferta->fkEquipo1." Equipo2: ".$oferta->fkEquipo2);
+	}
+
+	function cancelarOfertasConDerecho($pkDerecho)
+	{
+		$sql = "select pk_oferta from oferta where pk_oferta in (select fk_oferta_derecho_oferta from oferta_derecho where fk_oferta_derecho_derecho = ".$pkDerecho.")";
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()){
+				$pkOferta = $row["pk_oferta"];
+
+				cancelarOferta($pkOferta);
+			}
+		}
+	}
+
+	function cancelarOfertasConDraftpick($pkDraftpick)
+	{
+		$sql = "select pk_oferta from oferta where pk_oferta in (select fk_oferta_draftpick_oferta from oferta_draftpick where fk_oferta_draftpick_draftpick = ".$pkDraftpick.")";
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()){
+				$pkOferta = $row["pk_oferta"];
+
+				cancelarOferta($pkOferta);
+			}
+		}
+	}
+
+	function anularOferta($pkManager, $pkEquipo, $pkOferta)
+	{
+		$oferta = obtenerOferta($pkOferta);
+
+		cancelarOferta($pkOferta);
+
+		crearSuceso($pkManager, $pkEquipo, "CANCELAR_OFERTA", "Equipo1: ".$oferta->fkEquipo1." Equipo2: ".$oferta->fkEquipo2);
 	}
 ?>

@@ -6,6 +6,7 @@ require_once __DIR__ . '/../gestores/gestorjugadorliga.php';
 require_once __DIR__ . '/../gestores/gestorderecho.php';
 require_once __DIR__ . '/../gestores/gestordraftpick.php';
 require_once __DIR__ . '/../gestores/gestorequipo.php';
+require_once __DIR__ . '/../gestores/gestoroferta.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -221,6 +222,49 @@ if ($method === 'POST') {
 
       $ofertasRecibidas = obtenerListaOfertasRecibidas($pkEquipo);
       echo json_encode($ofertasRecibidas);
+      break;
+
+    case 'aceptarOferta':
+      // Llamar a la función aceptarOferta()
+      $pkManager = $input['pkManager'];
+      $pkEquipo = $input['pkEquipo'];
+      $pkOferta = $input['pkOferta'];
+      $pkLiga = $input['pkLiga'];
+
+      aceptarOferta($pkManager, $pkEquipo, $pkOferta, $pkLiga);
+
+      $response = [
+        'status' => 'ok',
+      ];
+      echo json_encode($response);
+      break;
+
+    case 'rechazarOferta':
+      // Llamar a la función rechazarOferta()
+      $pkManager = $input['pkManager'];
+      $pkEquipo = $input['pkEquipo'];
+      $pkOferta = $input['pkOferta'];
+
+      rechazarOferta($pkManager, $pkEquipo, $pkOferta);
+
+      $response = [
+        'status' => 'ok',
+      ];
+      echo json_encode($response);
+      break;
+
+    case 'anularOferta':
+      // Llamar a la función anularOferta()
+      $pkManager = $input['pkManager'];
+      $pkEquipo = $input['pkEquipo'];
+      $pkOferta = $input['pkOferta'];
+
+      anularOferta($pkManager, $pkEquipo, $pkOferta);
+
+      $response = [
+        'status' => 'ok',
+      ];
+      echo json_encode($response);
       break;
 
     default:
