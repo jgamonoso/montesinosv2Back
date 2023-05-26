@@ -1,8 +1,8 @@
 <?php
-// require_once __DIR__ . '/../gestores/gestormanager.php';
+require_once __DIR__ . '/../gestores/gestornoticia.php';
+require_once __DIR__ . '/../gestores/gestortrade.php';
 // require_once __DIR__ . '/../gestores/gestortemporada.php';
 // require_once __DIR__ . '/../gestores/gestorparametro.php';
-require_once __DIR__ . '/../gestores/gestornoticia.php';
 // require_once __DIR__ . '/../gestores/gestordraftpick.php';
 
 header("Access-Control-Allow-Origin: *");
@@ -32,6 +32,39 @@ if ($method === 'POST') {
         'status' => 'ok',
       ];
 
+      echo json_encode($response);
+      break;
+
+    case 'obtenerListaTradesPendientes':
+      // Llamar a la función obtenerListaTradesPendientes()
+
+      $tradesPendientes = obtenerListaTradesPendientes();
+      echo json_encode($tradesPendientes);
+      break;
+
+    case 'validarTrade':
+      // Llamar a la función validarTrade()
+      $pkManager = $input['pkManager'];
+      $pkTrade = $input['pkTrade'];
+
+      validarTrade($pkManager, $pkTrade);
+
+      $response = [
+        'status' => 'ok',
+      ];
+      echo json_encode($response);
+      break;
+
+    case 'vetarTrade':
+      // Llamar a la función vetarTrade()
+      $pkManager = $input['pkManager'];
+      $pkTrade = $input['pkTrade'];
+
+      vetarTrade($pkManager, $pkTrade);
+
+      $response = [
+        'status' => 'ok',
+      ];
       echo json_encode($response);
       break;
 

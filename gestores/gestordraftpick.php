@@ -168,4 +168,40 @@
 
 		return NULL;
 	}
+
+	function obtenerDraftpicksTradeEquipo($pkTrade, $pkEquipo)
+	{
+		$sql = "select * from draftpick where fk_draftpick_equipo_dest=".$pkEquipo." and pk_draftpick in (select fk_trade_draftpick_draftpick from trade_draftpick where fk_trade_draftpick_trade = ".$pkTrade.")";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0)
+		{
+			$listaDraftpicks = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$pick = new DraftPick();
+				$pick->pkDraftpick = $row["pk_draftpick"];
+				$pick->fkTemporada = $row["fk_draftpick_temporada"];
+				$pick->fkEquipoOri = $row["fk_draftpick_equipo_ori"];
+				$pick->fkEquipoDest = $row["fk_draftpick_equipo_dest"];
+				$pick->fkLiga = $row["fk_draftpick_liga"];
+
+				$pick->numRonda = $row["draftpick_numronda"];
+				$pick->numPick = $row["draftpick_numpick"];
+
+				$pick->enTradingBlock = ($row["draftpick_tradingblock"] != "0");
+
+				$pick->fkJugadorligaPreferido = $row["fk_draftpick_jugadorliga_preferido"];
+				$pick->fkJugadorligaElegido = $row["fk_draftpick_jugadorliga_elegido"];
+
+				array_push($listaDraftpicks, $pick);
+			}
+
+			return $listaDraftpicks;
+		}
+
+		return NULL;
+	}
 ?>
