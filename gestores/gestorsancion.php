@@ -65,4 +65,15 @@
 
 		altaNoticia("Sanci&oacute;n de <b>".$cantidad."M</b> para <b>".obtenerNombreEquipo($equipo)."</b> durante la temporada <b>".obtenerNombreTemporada($temporada)."</b> por: <i>".$motivo."</i>", 2, $pkLiga);
 	}
+
+	function altaSancionComi($pkManager, $equipo, $cantidad, $temporada, $motivo, $pkLiga)
+	{
+		altaSancion($equipo, $cantidad, $temporada, $motivo, $pkLiga);
+		crearSuceso($pkManager, $equipo, "ALTA_SANCION", "Cantidad: ".$cantidad." Temporada fin: ".$temporada);
+
+		$temporadaSiguiente = $temporada + 1;
+
+		altaSancion($equipo, $cantidad, $temporadaSiguiente, $motivo, $pkLiga);
+		crearSuceso($pkManager, $equipo, "ALTA_SANCION", "Cantidad: ".$cantidad." Temporada fin: ".$temporadaSiguiente);
+	}
 ?>

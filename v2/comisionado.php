@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../gestores/gestornoticia.php';
 require_once __DIR__ . '/../gestores/gestortrade.php';
 require_once __DIR__ . '/../gestores/gestorbonus.php';
+require_once __DIR__ . '/../gestores/gestorsancion.php';
 // require_once __DIR__ . '/../gestores/gestortemporada.php';
 // require_once __DIR__ . '/../gestores/gestorparametro.php';
 // require_once __DIR__ . '/../gestores/gestordraftpick.php';
@@ -79,6 +80,24 @@ if ($method === 'POST') {
       $pkLiga = $input['pkLiga'];
 
       altaBonusComi($pkManager, $equipo, $cantidad, $temporada, $motivo, $pkLiga);
+
+      $response = [
+        'status' => 'ok',
+      ];
+
+      echo json_encode($response);
+      break;
+
+    case 'altaSancionComi':
+      // Llamar a la función altaSancionComi()
+      $pkManager = $input['pkManager'];
+      $equipo = $input['pkEquipo'];
+      $cantidad = $input['cantidad'];
+      $temporada = $input['temporada'];
+      $motivo = $input['motivo'];
+      $pkLiga = $input['pkLiga'];
+
+      altaSancionComi($pkManager, $equipo, $cantidad, $temporada, $motivo, $pkLiga);
 
       $response = [
         'status' => 'ok',
