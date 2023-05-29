@@ -162,7 +162,26 @@
 				$nombresDraftpicks2 .= $draftpick->numRonda."a ronda ".obtenerNombreTemporada($draftpick->fkTemporada)." de ".obtenerNombreEquipo($draftpick->fkEquipoOri);
 			}
 
-			altaNoticia("Trade entre <b>".obtenerNombreEquipo($pkEquipo1)."</b> y <b>".obtenerNombreEquipo($pkEquipo2)."</b>: </br></br><b>Jugadores: </b>".$nombresJugadoresEquipo1."</br><b>Derechos: </b>".$nombresDerechosEquipo1."</br><b>Picks: </b>".$nombresDraftpicks1."</br></br>Por</br></br><b>Jugadores: </b>".$nombresJugadoresEquipo2."</br><b>Derechos: </b>".$nombresDerechosEquipo2."</br><b>Picks: </b>".$nombresDraftpicks2, 3, $pkLiga);
+			$lineaJugadores1 = !empty($nombresJugadoresEquipo1) ? "<b>Jugadores: </b>".$nombresJugadoresEquipo1."</br>" : "";
+			$lineaDerechos1 = !empty($nombresDerechosEquipo1) ? "<b>Derechos: </b>".$nombresDerechosEquipo1."</br>" : "";
+			$lineaPicks1 = !empty($nombresDraftpicks1) ? "<b>Picks: </b>".$nombresDraftpicks1."</br>" : "";
+
+			$lineaJugadores2 = !empty($nombresJugadoresEquipo2) ? "<b>Jugadores: </b>".$nombresJugadoresEquipo2."</br>" : "";
+			$lineaDerechos2 = !empty($nombresDerechosEquipo2) ? "<b>Derechos: </b>".$nombresDerechosEquipo2."</br>" : "";
+			$lineaPicks2 = !empty($nombresDraftpicks2) ? "<b>Picks: </b>".$nombresDraftpicks2 : "";
+
+			$texto = "Trade entre <b>".obtenerNombreEquipo($pkEquipo1)."</b> y <b>".obtenerNombreEquipo($pkEquipo2)."</b>: </br></br>"
+					"<b>".obtenerNombreEquipo($pkEquipo2)."recibiría:</b></br>"
+					.$lineaJugadores1
+					.$lineaDerechos1
+					.$lineaPicks1
+					."</br><b>".obtenerNombreEquipo($pkEquipo1)." recibiría:</b></br></br>"
+					.$lineaJugadores2
+					.$lineaDerechos2
+					.$lineaPicks2;
+
+			altaNoticia($texto, 3, $pkLiga);
+			// altaNoticia("Trade entre <b>".obtenerNombreEquipo($pkEquipo1)."</b> y <b>".obtenerNombreEquipo($pkEquipo2)."</b>: </br></br><b>Jugadores: </b>".$nombresJugadoresEquipo1."</br><b>Derechos: </b>".$nombresDerechosEquipo1."</br><b>Picks: </b>".$nombresDraftpicks1."</br></br>Por</br></br><b>Jugadores: </b>".$nombresJugadoresEquipo2."</br><b>Derechos: </b>".$nombresDerechosEquipo2."</br><b>Picks: </b>".$nombresDraftpicks2, 3, $pkLiga);
 		}
 	}
 
