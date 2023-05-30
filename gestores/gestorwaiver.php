@@ -2,6 +2,7 @@
 	require_once __DIR__ . '/../conexionbd.php';
 	require_once __DIR__ . '/../objetos/waiver.php';
 	require_once __DIR__ . '/gestorwaiverclaim.php';
+	require_once __DIR__ . '/gestorjugadorliga.php';
 
 	function obtenerWaiver($pkJugadorliga)
 	{
@@ -36,5 +37,43 @@
 
 		$sql = "insert into waiver (fk_waiver_equipo, fk_waiver_jugadorliga, fk_waiver_liga, waiver_fecha_ini, waiver_fecha_fin) values (".$pkEquipo.",".$pkJugadorliga.",".$pkLiga.",'".date('Ymd')."','".$finWaiver."') ";
 		ejecutarSql($sql);
+	}
+
+	function crearWaiverJugadoresRenovables()
+	{
+		$pkLiga = '1';
+		$listaJugadores = obtenerListaJugadoresRenovables($pkLiga);
+
+		foreach ($listaJugadores as $jugadorliga)
+		{
+			altaWaiver($jugadorliga->pkJugadorliga,"NULL", $pkLiga);
+		}
+
+		$pkLiga = '2';
+		$listaJugadores = obtenerListaJugadoresRenovables($pkLiga);
+
+		foreach ($listaJugadores as $jugadorliga)
+		{
+			altaWaiver($jugadorliga->pkJugadorliga,"NULL", $pkLiga);
+		}
+	}
+
+	function crearWaiverJugadoresLibres()
+	{
+		$pkLiga = '1';
+		$listaJugadores = obtenerListaJugadoresLibres($pkLiga);
+
+		foreach ($listaJugadores as $jugadorliga)
+		{
+			altaWaiver($jugadorliga->pkJugadorliga,"NULL",$pkLiga);
+		}
+
+		$pkLiga = '2';
+		$listaJugadores = obtenerListaJugadoresLibres($pkLiga);
+
+		foreach ($listaJugadores as $jugadorliga)
+		{
+			altaWaiver($jugadorliga->pkJugadorliga,"NULL",$pkLiga);
+		}
 	}
 ?>

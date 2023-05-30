@@ -47,4 +47,13 @@
 
 		crearSuceso($pkManager, $pkEquipo, "QUITAR_TRADBLOCK_DERECHO", $pkJugadorliga);
 	}
+
+	function expirarDerechos($temporadaActual)
+	{
+		$sql = "update jugadorliga set jugadorliga_tradingblock = 0 where pk_jugadorliga in (select fk_derecho_jugadorliga from derecho where fk_derecho_temporada_fin = ".$temporadaActual->pkTemporada.")";
+		ejecutarSql($sql);
+
+		$sql = "delete from derecho where fk_derecho_temporada_fin = ".$temporadaActual->pkTemporada;
+		ejecutarSql($sql);
+	}
 ?>

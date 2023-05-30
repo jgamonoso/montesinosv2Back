@@ -347,4 +347,18 @@
 
 		crearSuceso($pkManager, "NULL", "VALIDAR_TRADE", "Equipo1: ".$trade->fkEquipo1." Equipo2: ".$trade->fkEquipo2);
 	}
+
+	function expirarTrades($temporadaActual)
+	{
+		$sql = "select pk_trade from trade where pk_trade in (select fk_trade_contrato_trade from trade_contrato where fk_trade_contrato_contrato in (select pk_contrato from contrato where fk_contrato_temporada_fin = ".$temporadaActual->pkTemporada.")) or pk_trade in (select fk_trade_derecho_trade from trade_derecho where fk_trade_derecho_derecho in (select pk_derecho from derecho where fk_derecho_temporada_fin = ".$temporadaActual->pkTemporada."))";
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()){
+				$pkTrade = $row["pk_trade"];
+
+				cancelarTrade($pkTrade);
+			}
+		}
+	}
 ?>

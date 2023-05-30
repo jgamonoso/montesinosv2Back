@@ -3,7 +3,12 @@ require_once __DIR__ . '/../gestores/gestornoticia.php';
 require_once __DIR__ . '/../gestores/gestortrade.php';
 require_once __DIR__ . '/../gestores/gestorbonus.php';
 require_once __DIR__ . '/../gestores/gestorsancion.php';
-// require_once __DIR__ . '/../gestores/gestortemporada.php';
+require_once __DIR__ . '/../gestores/gestorequipo.php';
+require_once __DIR__ . '/../gestores/gestortemporada.php';
+require_once __DIR__ . '/../gestores/gestorwaiver.php';
+require_once __DIR__ . '/../gestores/gestorsubasta.php';
+require_once __DIR__ . '/../gestores/gestorjugadorliga.php';
+require_once __DIR__ . '/../gestores/gestorcontrato.php';
 // require_once __DIR__ . '/../gestores/gestorparametro.php';
 // require_once __DIR__ . '/../gestores/gestordraftpick.php';
 
@@ -98,6 +103,65 @@ if ($method === 'POST') {
       $pkLiga = $input['pkLiga'];
 
       altaSancionComi($pkManager, $equipo, $cantidad, $temporada, $motivo, $pkLiga);
+
+      $response = [
+        'status' => 'ok',
+      ];
+
+      echo json_encode($response);
+      break;
+
+    case 'cambiarEstadoTemporadaActual':
+      // Llamar a la función cambiarEstadoTemporadaActual()
+      $pkManager = $input['pkManager'];
+      $estado = $input['estado'];
+
+      switch ($estado) {
+        case 'RENOVACIONES':
+          desactivarCorteGratis();
+          // Procesar inicio de nueva temporada (preparar jugadores restringidos para renovaciones, derechos que expiran, contratos que expiran, sanciones y bonus que expiran / entran en vigor...)
+          cambiarTemporada();
+          // Poner todos los jugadores en waivers 1 d&iacute;a
+          crearWaiverJugadoresRenovables();
+          break;
+
+        case 'AL_OFFSEASON':
+          desactivarCorteGratis();
+          // finalizar pujas activas
+          finalizarSubastasAbiertas();
+          // liberar jugadores restringidos
+          liberarJugadoresRestringidos();
+          // Poner todos los jugadores en waivers 1 d&iacute;a
+          crearWaiverJugadoresLibres();
+          break;
+
+        case 'SEASON':
+          // finalizar pujas activas
+          finalizarSubastasAbiertas();
+          // Poner todos los jugadores en waivers 1 d&iacute;a
+          crearWaiverJugadoresLibres();
+          // comprobar exceso jugadores
+          comprobarExcesoJugadoresSeason();
+          desactivarCorteGratis();
+          break;
+
+        case 'TEAM_OPTION':
+          desactivarCorteGratis();
+          break;
+
+        case 'CORTE_GRATIS':
+          // convertir en FAs los LLD no recuperados
+          liberarContratosLLD();
+          // activar corte gratis
+          activarCorteGratis();
+          break;
+
+        default:
+          desactivarCorteGratis();
+          break;
+      }
+
+      cambiarEstadoTemporadaActual($pkManager, $estado);
 
       $response = [
         'status' => 'ok',

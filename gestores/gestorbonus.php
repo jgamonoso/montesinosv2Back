@@ -54,4 +54,10 @@
 
 		crearSuceso($pkManager, $equipo, "ALTA_BONUS", "Cantidad: ".$cantidad." Temporada fin: ".$temporada);
 	}
+
+	function expirarBonus($temporadaActual)
+	{
+		$sql = "delete from bonus where fk_bonus_temporada = ".$temporadaActual->pkTemporada;
+		ejecutarSql($sql);
+	}
 ?>

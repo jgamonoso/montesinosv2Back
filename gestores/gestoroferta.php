@@ -313,4 +313,18 @@
 
 		crearSuceso($pkManager, $pkEquipo, "CANCELAR_OFERTA", "Equipo1: ".$oferta->fkEquipo1." Equipo2: ".$oferta->fkEquipo2);
 	}
+
+	function expirarOfertas($temporadaActual)
+	{
+		$sql = "select pk_oferta from oferta where pk_oferta in (select fk_oferta_contrato_oferta from oferta_contrato where fk_oferta_contrato_contrato in (select pk_contrato from contrato where fk_contrato_temporada_fin = ".$temporadaActual->pkTemporada.")) or pk_oferta in (select fk_oferta_derecho_oferta from oferta_derecho where fk_oferta_derecho_derecho in (select pk_derecho from derecho where fk_derecho_temporada_fin = ".$temporadaActual->pkTemporada."))";
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()){
+				$pkOferta = $row["pk_oferta"];
+
+				cancelarOferta($pkOferta);
+			}
+		}
+	}
 ?>

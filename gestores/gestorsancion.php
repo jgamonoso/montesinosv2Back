@@ -76,4 +76,10 @@
 		altaSancion($equipo, $cantidad, $temporadaSiguiente, $motivo, $pkLiga);
 		crearSuceso($pkManager, $equipo, "ALTA_SANCION", "Cantidad: ".$cantidad." Temporada fin: ".$temporadaSiguiente);
 	}
+
+	function expirarSanciones($temporadaActual)
+	{
+		$sql = "delete from sancion where fk_sancion_temporada = ".$temporadaActual->pkTemporada;
+		ejecutarSql($sql);
+	}
 ?>

@@ -1,9 +1,10 @@
 <?php
 	require_once __DIR__ . '/../conexionbd.php';
 	require_once __DIR__ . '/../objetos/draftpick.php';
+	require_once __DIR__ . '/gestorequipo.php';
+	require_once __DIR__ . '/gestorsuceso.php';
 	// require_once("/home/montesinyy/www/gestores/gestortemporada.php");
 	// require_once("/home/montesinyy/www/gestores/gestorderecho.php");
-	// require_once("/home/montesinyy/www/gestores/gestorequipo.php");
 	// require_once("/home/montesinyy/www/gestores/gestorjugadorliga.php");
 	// require_once("/home/montesinyy/www/gestores/gestoroferta.php");
 	// require_once("/home/montesinyy/www/gestores/gestortrade.php");
@@ -203,5 +204,17 @@
 		}
 
 		return NULL;
+	}
+
+	function crearDraftpicksTemporada($pkTemporada)
+	{
+		$listaEquipos = obtenerListaEquipos();
+		foreach ($listaEquipos as $equipo)
+		{
+			$sql = "insert into draftpick (fk_draftpick_liga, fk_draftpick_temporada, fk_draftpick_equipo_ori, fk_draftpick_equipo_dest, draftpick_numronda, draftpick_tradingblock) values (".$equipo->fkLiga.",".$pkTemporada.",".$equipo->pkEquipo.",".$equipo->pkEquipo.",1,0)";
+			ejecutarSql($sql);
+			$sql = "insert into draftpick (fk_draftpick_liga, fk_draftpick_temporada, fk_draftpick_equipo_ori, fk_draftpick_equipo_dest, draftpick_numronda, draftpick_tradingblock) values (".$equipo->fkLiga.",".$pkTemporada.",".$equipo->pkEquipo.",".$equipo->pkEquipo.",2,0)";
+			ejecutarSql($sql);
+		}
 	}
 ?>
