@@ -133,8 +133,12 @@
 		$sql = "update temporada set temporada_estado='".$estado."' where temporada_actual=1;";
 		ejecutarSql($sql);
 
-		altaNoticia("Cambio de estado de la Temporada a ".str_replace("_", ' ', $estado), 1, 1);
-		altaNoticia("Cambio de estado de la Temporada a ".str_replace("_", ' ', $estado), 1, 2);
+		altaNoticia("Cambio de estado de la temporada a ".str_replace("_", ' ', $estado), 1, 1);
+		altaNoticia("Cambio de estado de la temporada a ".str_replace("_", ' ', $estado), 1, 2);
+		if ($estado === 'RENOVACIONES') {
+			altaNoticia("---<b>COMIENZA UNA NUEVA TEMPORADA</b>---", 1, 1);
+			altaNoticia("---<b>COMIENZA UNA NUEVA TEMPORADA</b>---", 1, 2);
+		}
 
 		crearSuceso($pkManager, "NULL", "CAMBIAR_ESTADO_TEMPORADA", $estado);
 	}
