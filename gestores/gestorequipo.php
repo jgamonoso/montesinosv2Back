@@ -336,4 +336,98 @@
 		$sql = "update equipo set equipo_corte_gratis = 1";
 		ejecutarSql($sql);
 	}
+
+	function obtenerListaEquiposLiga($pkLiga)
+	{
+		$sql = "select * from equipo where fk_equipo_liga=".$pkLiga;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$listaEquipos = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$eq = new Equipo();
+				$eq->pkEquipo = $row["pk_equipo"];
+				$eq->nombre = $row["equipo_nombre"];
+				$eq->capLibre = $row["equipo_cap_libre"];
+				$eq->waiver = $row["equipo_waiver"];
+				$eq->fkLiga = $row["fk_equipo_liga"];
+
+				$eq->corteGratisHabilitado = $row["equipo_corte_gratis"];
+				$eq->bloqueado = $row["equipo_bloqueado"];
+				$eq->numMovesDisponibles = $row["equipo_moves_semanales"];
+
+				$eq->jugadoresConContrato = obtenerJugadoresConContratoEquipo($eq->pkEquipo);
+				$eq->jugadoresIL = obtenerJugadoresIL($eq->pkEquipo);
+				$eq->jugadoresLesionados = obtenerJugadoresLesionados($eq->pkEquipo);
+				$eq->jugadoresCovid = obtenerJugadoresCOVID($eq->pkEquipo);
+				$eq->jugadoresConDerecho = obtenerJugadoresConDerechoEquipo($eq->pkEquipo);
+				$eq->draftpicks = obtenerDraftpicksEquipo($eq->pkEquipo);
+
+				$eq->sanciones = obtenerSancionesEquipo($eq->pkEquipo);
+				$eq->bonus = obtenerBonusEquipo($eq->pkEquipo);
+
+				$eq->apuesta = obtenerApuestaEquipo($eq->pkEquipo);
+
+				$eq->palmares = obtenerPalmaresEquipo($eq->pkEquipo);
+				$eq->records = obtenerRecordsEquipo($eq->pkEquipo);
+
+				array_push($listaEquipos, $eq);
+			}
+
+			return $listaEquipos;
+		}
+
+		return NULL;
+	}
+
+	function obtenerListaEquiposLigaApuestas($pkLiga)
+	{
+		$sql = "select * from equipo where fk_equipo_liga=".$pkLiga;
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+
+			$listaEquipos = array();
+
+			while ($row = $result->fetch_assoc())
+			{
+				$eq = new Equipo();
+				$eq->pkEquipo = $row["pk_equipo"];
+				$eq->nombre = $row["equipo_nombre"];
+				$eq->capLibre = $row["equipo_cap_libre"];
+				$eq->waiver = $row["equipo_waiver"];
+				$eq->fkLiga = $row["fk_equipo_liga"];
+
+				$eq->corteGratisHabilitado = $row["equipo_corte_gratis"];
+				$eq->bloqueado = $row["equipo_bloqueado"];
+				$eq->numMovesDisponibles = $row["equipo_moves_semanales"];
+
+				// $eq->jugadoresConContrato = obtenerJugadoresConContratoEquipo($eq->pkEquipo);
+				// $eq->jugadoresIL = obtenerJugadoresIL($eq->pkEquipo);
+				// $eq->jugadoresLesionados = obtenerJugadoresLesionados($eq->pkEquipo);
+				// $eq->jugadoresCovid = obtenerJugadoresCOVID($eq->pkEquipo);
+				// $eq->jugadoresConDerecho = obtenerJugadoresConDerechoEquipo($eq->pkEquipo);
+				// $eq->draftpicks = obtenerDraftpicksEquipo($eq->pkEquipo);
+
+				// $eq->sanciones = obtenerSancionesEquipo($eq->pkEquipo);
+				// $eq->bonus = obtenerBonusEquipo($eq->pkEquipo);
+
+				$eq->apuesta = obtenerApuestaEquipo($eq->pkEquipo);
+
+				// $eq->palmares = obtenerPalmaresEquipo($eq->pkEquipo);
+				// $eq->records = obtenerRecordsEquipo($eq->pkEquipo);
+
+				array_push($listaEquipos, $eq);
+			}
+
+			return $listaEquipos;
+		}
+
+		return NULL;
+	}
 ?>

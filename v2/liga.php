@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../gestores/gestormanager.php';
 require_once __DIR__ . '/../gestores/gestorequipo.php';
+require_once __DIR__ . '/../gestores/gestorpalmares.php';
+require_once __DIR__ . '/../gestores/gestorrecord.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -27,7 +29,31 @@ if ($method === 'POST') {
       $listaEquiposNombre = obtenerListaEquiposNombre();
       echo json_encode($listaEquiposNombre);
       break;
+    case 'obtenerPalmaresLiga':
+      // Llamar a la función obtenerPalmaresLiga() y devolver el resultado
+      $pkLiga = $input['pkLiga'];
+      $listaPalmares = obtenerPalmaresLiga($pkLiga);
+      echo json_encode($listaPalmares);
+      break;
+    case 'obtenerRecordsLiga':
+      // Llamar a la función obtenerRecordsLiga() y devolver el resultado
+      $pkLiga = $input['pkLiga'];
+      $listaRecords = obtenerRecordsLiga($pkLiga);
+      echo json_encode($listaRecords);
+      break;
+    case 'obtenerListaEquiposLiga':
+      // Llamar a la función obtenerListaEquiposLiga() y devolver el resultado
+      $pkLiga = $input['pkLiga'];
+      $listaEquiposLiga = obtenerListaEquiposLiga($pkLiga);
+      echo json_encode($listaEquiposLiga);
+      break;
 
+    case 'obtenerListaEquiposLigaApuestas':
+      // Llamar a la función obtenerListaEquiposLigaApuestas() y devolver el resultado
+      $pkLiga = $input['pkLiga'];
+      $listaEquiposLiga = obtenerListaEquiposLigaApuestas($pkLiga);
+      echo json_encode($listaEquiposLiga);
+      break;
     default:
       break;
   }
