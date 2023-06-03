@@ -5,6 +5,7 @@ require_once __DIR__ . '/../gestores/gestorpalmares.php';
 require_once __DIR__ . '/../gestores/gestorrecord.php';
 require_once __DIR__ . '/../gestores/gestorequiponba.php';
 require_once __DIR__ . '/../gestores/gestorentrenador.php';
+require_once __DIR__ . '/../gestores/gestortemporada.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -65,6 +66,11 @@ if ($method === 'POST') {
       // Llamar a la función obtenerListaEntrenadores() y devolver el resultado
       $listaEntrenadoresNba = obtenerListaEntrenadores();
       echo json_encode($listaEntrenadoresNba);
+      break;
+    case 'obtenerListaTemporadas':
+      // Llamar a la función obtenerListaTemporadas() y devolver el resultado
+      $listatemporadas = obtenerListaTemporadas();
+      echo json_encode($listatemporadas);
       break;
     default:
       break;

@@ -143,4 +143,26 @@
 		crearSuceso($pkManager, "NULL", "CAMBIAR_ESTADO_TEMPORADA", $estado);
 	}
 
+	function obtenerListaTemporadas()
+	{
+		$sql = "select * from temporada";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$listaTemporada = array();
+			while ($row = $result->fetch_assoc())
+			{
+				$temporada = new Temporada();
+				$temporada->pkTemporada = $row["pk_temporada"];
+				$temporada->nombre = $row["temporada_nombre"];
+
+				array_push($listaTemporada, $temporada);
+			}
+			return $listaTemporada;
+		}
+
+		return NULL;
+	}
+
 ?>
