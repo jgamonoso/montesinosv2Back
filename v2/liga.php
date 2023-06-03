@@ -3,6 +3,8 @@ require_once __DIR__ . '/../gestores/gestormanager.php';
 require_once __DIR__ . '/../gestores/gestorequipo.php';
 require_once __DIR__ . '/../gestores/gestorpalmares.php';
 require_once __DIR__ . '/../gestores/gestorrecord.php';
+require_once __DIR__ . '/../gestores/gestorequiponba.php';
+require_once __DIR__ . '/../gestores/gestorentrenador.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
@@ -53,6 +55,16 @@ if ($method === 'POST') {
       $pkLiga = $input['pkLiga'];
       $listaEquiposLiga = obtenerListaEquiposLigaApuestas($pkLiga);
       echo json_encode($listaEquiposLiga);
+      break;
+    case 'obtenerListaEquiposNba':
+      // Llamar a la función obtenerListaEquiposNba() y devolver el resultado
+      $listaEquiposNbaNombre = obtenerListaEquiposNba();
+      echo json_encode($listaEquiposNbaNombre);
+      break;
+    case 'obtenerListaEntrenadores':
+      // Llamar a la función obtenerListaEntrenadores() y devolver el resultado
+      $listaEntrenadoresNba = obtenerListaEntrenadores();
+      echo json_encode($listaEntrenadoresNba);
       break;
     default:
       break;
