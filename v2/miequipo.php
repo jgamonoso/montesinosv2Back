@@ -267,6 +267,21 @@ if ($method === 'POST') {
       echo json_encode($response);
       break;
 
+    case 'recuperarJugadorLesionado':
+      // Llamar a la función recuperarJugadorLesionado()
+      $pkManager = $input['pkManager'];
+      $pkEquipo = $input['pkEquipo'];
+      $pkJugadorliga = $input['pkJugadorliga'];
+      $pkLiga = $input['pkLiga'];
+
+      recuperarJugadorLesionado($pkManager, $pkEquipo, $pkJugadorliga, $pkLiga);
+
+      $response = [
+        'status' => 'ok',
+      ];
+      echo json_encode($response);
+      break;
+
     default:
       break;
   }

@@ -985,4 +985,42 @@
 		$sql = "update jugadorliga set fk_jugadorliga_equipo_restringido=NULL";
 		ejecutarSql($sql);
 	}
+
+	function recuperarJugadorLesionado($pkManager, $pkEquipo, $pkJugadorliga, $pkLiga)
+	{
+		$sql = "update contrato set contrato_lld=0 where fk_contrato_jugadorliga=".$pkJugadorliga;
+		ejecutarSql($sql);
+
+		$salario = 0;
+		$sql = "select contrato_salario from contrato where fk_contrato_jugadorliga=".$pkJugadorliga;
+		$result = consultarSql($sql);
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+			$salario = $row["contrato_salario"];
+		}
+
+		$sql = "update equipo set equipo_cap_libre=ROUND(equipo_cap_libre-".$salario.",1) where pk_equipo in (select fk_contrato_equipo from contrato where fk_contrato_jugadorliga=".$pkJugadorliga.")";
+		ejecutarSql($sql);
+
+		altaNoticia("<b>".obtenerNombreJugadorliga($pkJugadorliga)."</b> recuperado de LLD.", 3,$pkLiga);
+
+		crearSuceso($pkManager, $pkEquipo, "RECUPERAR_LLD_JUGADOR", $pkJugadorliga);
+	}
+
+	function obtenerNombreJugadorliga($pkJugadorliga)
+	{
+		$sql = "select jugador_abreviado from jugador where pk_jugador in (select fk_jugadorliga_jugador from jugadorliga where pk_jugadorliga=".$pkJugadorliga.")";
+
+		$result = consultarSql($sql);
+
+		if ($result->num_rows > 0) {
+			$row = $result->fetch_assoc();
+
+			$nombreAbreviado = $row["jugador_abreviado"];
+
+			return $nombreAbreviado;
+		}
+
+		return NULL;
+	}
 ?>
